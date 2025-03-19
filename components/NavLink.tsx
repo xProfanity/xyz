@@ -17,11 +17,9 @@ export default function NavLink({index, link, icon, name}: Props) {
     const isActive = (currentLink: string) => pathname === currentLink
 
   return (
-    <li key={index} className="">
-        <Link href={link} className="flex flex-row justify-center items-center gap-2">
-            <span className={isActive(link) ? "!text-pink-500" : ""}>{icon}</span>
-            <h1 className="capitalize poppins-medium">{name}</h1>
-        </Link>
-    </li>
+    <Link href={link} className="flex flex-col md:flex-row justify-center items-center gap-2">
+        <span className={isActive(link) ? "!text-pink-500" : ""}>{icon}</span>
+        <h1 className="capitalize poppins-light md:poppins-medium hidden md:block">{name}</h1>
+    </Link>
   )
 }

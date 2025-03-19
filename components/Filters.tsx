@@ -6,8 +6,8 @@ import Input from "./Input"
 
 export default function Filters() {
   return (
-    <div className="flex flex-row gap-2 justify-center items-center">
-        <div className="w-[35rem]">
+    <div className="hidden md:flex flex-col md:flex-row gap-2 justify-center items-center">
+        <div className="w-full md:w-[35rem]">
             <Input
                 onChangeFn={()=>{}}
                 value=""

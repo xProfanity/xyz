@@ -20,14 +20,14 @@ export default function Input({type, classes, onChangeFn, placeholder, value, in
     <div className="inline-flex w-full">
       {
         icon && (
-          <span className="h-16 w-16 rounded-s-full bg-gray-200 flex flex-col justify-center items-center p-4">
+          <span className={`h-16 w-16 rounded-s-full flex flex-col justify-center items-center p-4 ${classes}`}>
             {icon}
           </span>
         )
       }
       <input
           type={type || 'text'}
-          className={`h-16 bg-gray-200 outline-none w-full max-w-[550px] ${!icon ? 'rounded-full' : 'rounded-e-full'} text-[#181818] dark:font-semibold text-lg p-4 ${classes}`}
+          className={`h-16 outline-none w-full max-w-[550px] ${!icon ? 'rounded-full' : 'rounded-e-full'} text-[#181818] dark:font-semibold text-lg p-4 ${classes}`}
           value={value}
           onChange={onChangeFn}
           placeholder={placeholder}
