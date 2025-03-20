@@ -8,6 +8,7 @@ import { TbPasswordUser } from "react-icons/tb";
 import { Button, Input } from "@/components";
 import { BASEURL } from "@/constants";
 import { useUser } from "@/store";
+import { useRouter } from "next/navigation";
 
 export default function Signin() {
     const [emailAddress, setEmailAddress] = useState("")
@@ -19,6 +20,8 @@ export default function Signin() {
     const [signIn, setSignIn] = useState(true)
     const [error, setError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+
+    const router = useRouter()
 
     const {setData} = useUser((state) => state)
 
@@ -52,7 +55,7 @@ export default function Signin() {
                 userId: data.user_id
             })
 
-            setError("No redirection provided")
+            router.push('/')
         } catch (error) {
             console.log('error signing in', error)
             setError(error as string)
@@ -97,7 +100,7 @@ export default function Signin() {
                 name: data.name
             })
 
-            setError("No redirection provided")
+
         } catch (error) {
             console.log('error', error)
         } finally {
