@@ -7,13 +7,14 @@ interface Props {
     textBtn?: true | boolean
     classes?: string | null
     disabled?: boolean
+    loading?: true | boolean
     handleOnClick: () => void
 }
 
-export default function Button({children, primary, classes, handleOnClick, fullWidth, disabled, textBtn}: Props) {
+export default function Button({children, primary, classes, handleOnClick, fullWidth, disabled, textBtn, loading}: Props) {
   return (
-    <button className={`rounded-full flex flex-col justify-center items-center cursor-pointer ${primary ? 'bg-black text-white' : 'border border-black'} ${fullWidth && 'w-full'} ${textBtn ? 'border-0 h-0 px-0' : 'h-16 px-10'} ${classes}`} onClick={handleOnClick} disabled={disabled}>
-        {children}
+    <button className={`rounded-full flex flex-col justify-center items-center cursor-pointer ${primary ? loading ? 'bg-gray-300 text-black' : 'bg-black text-white' : 'border border-black'} ${fullWidth && 'w-full'} ${textBtn ? 'border-0 h-0 px-0' : 'h-16 px-10'} ${classes}`} onClick={handleOnClick} disabled={disabled}>
+        {loading ? 'Loading...' : children}
     </button>
   )
 }

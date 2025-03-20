@@ -26,3 +26,5 @@ const studentNavLinks = [
     //   icon: <TbCategory size={35} />,
     },
 ]
+
+export const BASEURL = "https://api.dev.excellencemalawi.com/api"
