@@ -9,7 +9,7 @@ import { MdOutlineSubject } from "react-icons/md";
 import { RiHome4Fill, RiProgress7Line } from "react-icons/ri";
 import { TbCategory } from "react-icons/tb";
 
-import { Filters, Header, NavLink } from "@/components";
+import { Filters, Header, NavLink, StudentName } from "@/components";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -31,17 +31,17 @@ export default function RootLayout({
     },
     {
       name: 'Subjects',
-      link: '/subjects',
+      link: '/student/subjects',
       icon: <MdOutlineSubject size={35} />,
     },
     {
       name: 'Progress',
-      link: '/progress',
+      link: '/student/progress',
       icon: <RiProgress7Line size={35} />,
     },
     {
       name: 'subscription',
-      link: '/subscription',
+      link: '/student/subscription',
       icon: <TbCategory size={35} />,
     },
 ]
@@ -82,10 +82,10 @@ export default function RootLayout({
 
             <div className="hidden md:flex flex-row justify-center items-center">
               <div className="flex flex-col justify-center items-end">
-                <h1 className="poppins-bold">Hello !Name</h1>
+                <StudentName />
                 <div className="flex flex-row justify-center items-center">
                   <div className="h-2 w-40 rounded-full bg-gray-200">
-                    <div className="bg-black rounded-full w-1/3 h-full"></div>
+                    <div className="bg-primary rounded-full w-1/3 h-full"></div>
                   </div>
                   <div><HiBookOpen size={35} color="pink" /></div>
                 </div>
@@ -99,7 +99,7 @@ export default function RootLayout({
             </div>
           </div>
         </div>
-        <div className="bg-pink-50 w-full p-2 md:p-8 mt-10">
+        <div className="bg-pink-50 dark:bg-transparent w-full p-2 md:p-8 mt-10">
           <div className="flex flex-col md:flex-row justify-start md:justify-between md:items-center">
             <Header />
             <Filters />

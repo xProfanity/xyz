@@ -1,3 +1,4 @@
+"use client"
 
 const studentNavLinks = [
     {
@@ -28,3 +29,7 @@ const studentNavLinks = [
 ]
 
 export const BASEURL = "https://api.dev.excellencemalawi.com/api"
+
+export const isUserLoggedIn = () => {
+  return !!localStorage.getItem('access')
+}

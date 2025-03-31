@@ -18,8 +18,8 @@ export default function NavLink({index, link, icon, name}: Props) {
 
   return (
     <Link href={link} className="flex flex-col md:flex-row justify-center items-center gap-2">
-        <span className={isActive(link) ? "!text-pink-500" : ""}>{icon}</span>
-        <h1 className="capitalize poppins-light md:poppins-medium hidden md:block">{name}</h1>
+        <span className={isActive(link) ? "!text-primary" : ""}>{icon}</span>
+        <h1 className="capitalize poppins-light md:poppins-bold hidden md:block text-base text-gray-500">{name.replace('student/', '')}</h1>
     </Link>
   )
 }

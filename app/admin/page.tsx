@@ -1,6 +1,6 @@
 
 export default function Admin() {
   return (
-    <h1 className='poppins-bold text-pink-500 text-lg'>New framework fucks</h1>
+    <h1 className='poppins-bold text-primary text-lg'>New framework sucks</h1>
   )
 }

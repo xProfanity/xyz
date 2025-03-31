@@ -45,8 +45,19 @@ export default function Signin() {
             const response = await fetch(`${BASEURL}/user/login/`, options)
             const data = await response.json()
 
+            if(data.status_code === 401) {
+                return setError(data.detail)
+            }
+
             localStorage.setItem('access', data.access)
             localStorage.setItem('refresh', data.refresh)
+
+            await fetch('/api/set-cookie', {
+                method: 'POST',
+                body: JSON.stringify({
+                    access: data.access
+                })
+            })
 
             setData({
                 name: data.username,
@@ -54,11 +65,11 @@ export default function Signin() {
                 role: data.role,
                 userId: data.user_id
             })
-
+            setError("")
             router.push('/')
         } catch (error) {
             console.log('error signing in', error)
-            setError(error as string)
+            setError("Something went wrong")
         } finally {
             setIsLoading(false)
         }
@@ -69,7 +80,7 @@ export default function Signin() {
             const response = await fetch(`${BASEURL}/user/register/`, {
                 method: 'POST',
                 body: JSON.stringify({
-                    name: '',
+                    name: 'new student',
                     email: emailAddress,
                     password,
                     role: 'student',
@@ -78,7 +89,7 @@ export default function Signin() {
                     'Content-Type': 'application/json'
                 }
             })
-            const response2 = await fetch(`${BASEURL}/token`, {
+            const response2 = await fetch(`${BASEURL}/token/`, {
                 method: 'POST',
                 body: JSON.stringify({
                     email: emailAddress,
@@ -91,6 +102,10 @@ export default function Signin() {
             const data = await response.json()
             const token = await response2.json()
 
+            if(!token?.access) {
+                return setError("Error creating user")
+            }
+
             localStorage.setItem('refresh', token.refresh)
             localStorage.setItem('access', token.access)
 
@@ -100,9 +115,11 @@ export default function Signin() {
                 name: data.name
             })
 
-
+            setError("")
+            router.push("/onboarding/username")
         } catch (error) {
             console.log('error', error)
+            setError("Something went wrong")
         } finally {
             setIsLoading(false)
         }

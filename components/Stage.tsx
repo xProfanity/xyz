@@ -12,7 +12,7 @@ export default function Stage({title, caption}: Props) {
 
     const setCursor = (title: string) => pathname.replace("/onboarding/", "").replaceAll('-', ' ') === title.toLowerCase()
   return (
-    <li className={`p-5 w-full rounded-lg ${setCursor(title) && 'border'}`}>
+    <li className={`p-5 w-full rounded-lg ${setCursor(title) && 'border border-primary'}`}>
         <h1 className='poppins-semibold text-xl'>{title}</h1>
         <p className='poppins-light text-base text-gray-500'>{caption}</p>
     </li>

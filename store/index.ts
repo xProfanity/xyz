@@ -8,6 +8,7 @@ interface User {
     name: string
     email: string
     role: string
+    studentType: string
     profileId: string | null
 }
 

@@ -18,8 +18,8 @@ export default function OnboardingLayout({children}: {children: React.ReactNode}
         }
     ]
   return (
-    <div className='h-screen w-full flex flex-row justify-start items-start'>
-        <section className='h-full w-1/3 bg-gray-300 hidden md:flex flex-col'>
+    <div className='min-h-screen w-full flex flex-row justify-start items-start'>
+        <section className='h-screen w-1/3 bg-gray-300 dark:bg-transparent hidden md:flex flex-col'>
             <div className='w-3/5 mx-auto mt-12'>
                 <Image
                     src={"/logo.png"}
@@ -37,7 +37,7 @@ export default function OnboardingLayout({children}: {children: React.ReactNode}
                 </ul>
             </div>
         </section>
-        <main className='h-full w-full md:w-2/3'>{children}</main>
+        <main className='min-h-full w-full md:w-2/3'>{children}</main>
     </div>
   )
 }
