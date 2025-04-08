@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       {/* <RouteControllerProvider> */}
-        <body>
+        <body className="">
             <main>{children}</main>
         </body>
       {/* </RouteControllerProvider> */}

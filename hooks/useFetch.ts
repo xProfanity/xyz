@@ -2,17 +2,21 @@
 
 import { refreshToken } from "@/app/api"
 import { BASEURL } from "@/constants"
+import { usePathname } from "next/navigation"
 
 export default function useFetch() {
 
+    const pathname = usePathname()
+
     const fetchRequest = async (endpoint: string, method: string, body?: string | null) => {
 
-        if(!localStorage.getItem('access')) {
+        console.log('pathname', pathname)
+        if(!localStorage.getItem('access') && pathname !== '/authentication/sign-in') {
             localStorage.removeItem('refresh')
             localStorage.removeItem('user')
             await fetch('/api/set-cookie', {method: 'DELETE'})
 
-            throw new Error("user not found")
+            throw "user not found"
         }
 
         try {
@@ -27,7 +31,7 @@ export default function useFetch() {
 
             const data = await response.json()
 
-            if(data.status_code === 401) {
+            if(data.status_code === 401 && pathname !== '/authentication/sign-in') {
                 const token = await refreshToken(localStorage.getItem('refresh') as string, localStorage.getItem('access') as string)
                 localStorage.setItem('access', token?.access)
                 localStorage.setItem('refresh', token?.refresh)
@@ -37,7 +41,8 @@ export default function useFetch() {
 
             return data
         } catch (error) {
-            throw new Error("Server error")
+            console.log('error', error)
+            throw "Server error"
         }
     }
 

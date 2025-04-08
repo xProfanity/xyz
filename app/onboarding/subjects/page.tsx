@@ -3,35 +3,78 @@
 import { Button } from "@/components"
 import useFetch from "@/hooks/useFetch"
 import { useUser } from "@/store"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 interface Subject {
-    id: 0,
-    name: string,
-    education_type: string,
+    id: number
+    name: string
+    education_type: string
     description: string
+    isActive: boolean
+    course: string | null
 }
 
 export default function Subjects() {
   
   const [subjects, setSubjects] = useState<Subject[] | null>(null)
-  const {role, studentType}= useUser((state) => state)
+  const {role, studentType, profileId} = useUser((state) => state)
   const {fetchRequest} = useFetch()
+  const [isLoading, setIsLoading] = useState(false)
 
-  console.log('studentType', studentType)
+  const router = useRouter()
+
   console.log('subjects', subjects)
+
+  const handleEnrollment = async () => {
+    const selectedSubject = subjects?.filter((subject) => subject.isActive)[0]
+
+    try {
+      setIsLoading(true)
+      const response = await fetchRequest('enrollments/', 'POST', JSON.stringify({
+        student: profileId,
+        current_level: studentType === "professional" ? "" : selectedSubject?.name,
+        course: studentType === "secondary" ? "" : selectedSubject?.course,
+        status: "active"
+      }))
+
+      console.log('response', response)
+      router.push('/student')
+    } catch (error) {
+      console.log('error', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const selectCourse = (id: number) => {
+    const selectedSubject = subjects?.map((subject, index) => {
+      if(subject.id === id && !subject.isActive) {
+        return {
+          ...subject,
+          isActive: true
+        }
+      }
+
+      return {
+        ...subject,
+        isActive: false
+      }
+    })
+
+    setSubjects(selectedSubject as Subject[] | null)
+  }
 
   useEffect(() => {
     const fetchSubjects = async () => {
-      console.log("called");
-
       const student_type = JSON.parse(localStorage.getItem('user') as string)?.state.studentType
-
       try {
-        const response = await fetchRequest(`${student_type === "professional" ? 'courses' : 'subjects'}/`, 'GET')
+        const response = await fetchRequest(`levels/?education_type=${studentType}`, 'GET')
   
+        const subjects = response?.map((item: Subject) => ({...item, isActive: false})) as Subject[] | null
+
         console.log('data', response)
-        setSubjects(response)
+        setSubjects(subjects)
       } catch (error) {
         console.log('error', error)
       }
@@ -45,9 +88,9 @@ export default function Subjects() {
       <h1 className="mt-20 poppins-semibold text-gray-500">I want to learn</h1>
       
       {subjects ? (
-        <div className="mt-10 flex flex-row flex-wrap justify-center items-center w-full md:w-1/2 p-5 gap-5">
+        <div className="mt-10 flex flex-row flex-wrap p-5 gap-5 flexible-grid">
           {subjects.map((subject, index) => (
-            <Subject subject={subject} key={index} />
+            <Subject subject={subject} selectCourse={selectCourse} key={index} />
           ))}
         </div>
       ) : (
@@ -56,7 +99,7 @@ export default function Subjects() {
 
       {subjects && (
         <div className="w-5/6 md:w-1/2 mt-10">
-          <Button handleOnClick={()=>{}} primary fullWidth classes={"rounded-lg"}>
+          <Button handleOnClick={handleEnrollment} primary fullWidth classes={"rounded-lg"} disabled={isLoading} loading={isLoading}>
             Finish
           </Button>
         </div>
@@ -65,11 +108,11 @@ export default function Subjects() {
   )
 }
 
-const Subject = ({subject}: {subject: Subject}) => {
-  
+const Subject = ({subject, selectCourse}: {subject: Subject, selectCourse: (id: number) => void}) => {
+
   return (
-    <div className="w-40 h-40 border hover:border-primary hover:outline-4 hover:outline-primary cursor-pointer rounded-lg flex flex-col justify-between items-center p-1"
-      // onClick={selectCourse}
+    <div className={`border hover:border-primary hover:outline-4 hover:outline-primary cursor-pointer rounded-lg flex flex-col justify-between items-center p-1 ${subject.isActive && 'bg-primary/50 border-0 outline-4 outline-primary'}`}
+      onClick={() => selectCourse(subject.id)}
     >
       <p className="text-orange-500 poppins-semibold text-lg">{subject.name}</p>
       <p className="text-sm poppins-bold text-gray-500 capitalize">{subject.education_type}</p>

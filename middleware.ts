@@ -4,9 +4,16 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(request: NextRequest) {
     const cookieStore = await cookies()
     const access = cookieStore.get('access')
+    const role = cookieStore.get('role')
 
-    if(!access) {
+    const link = request.nextUrl.pathname
+
+    if(!access?.value) {
         return NextResponse.redirect(new URL('/authentication/sign-in', request.url))
+    }
+
+    if(role?.value === 'admin') {
+        console.log(`user is a ${role.value}`);
     }
 
     return NextResponse.next()

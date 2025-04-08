@@ -7,6 +7,7 @@ import { TbPasswordUser } from "react-icons/tb";
 
 import { Button, Input } from "@/components";
 import { BASEURL } from "@/constants";
+import useFetch from "@/hooks/useFetch";
 import { useUser } from "@/store";
 import { useRouter } from "next/navigation";
 
@@ -24,52 +25,65 @@ export default function Signin() {
     const router = useRouter()
 
     const {setData} = useUser((state) => state)
+    const {fetchRequest} = useFetch()
 
     const toggleAuthMode = () => setSignIn(!signIn)
 
     const handleSignIn = async () => {
         try {
-
-            const options = {
-                method: 'POST',
-                body: JSON.stringify({
-                    email: emailAddress,
-                    password
-                }),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }
-
             setIsLoading(true)
-            const response = await fetch(`${BASEURL}/user/login/`, options)
-            const data = await response.json()
+            
+            const data = await fetchRequest('user/login/', 'POST', JSON.stringify({
+                email: emailAddress,
+                password
+            }))
 
             if(data.status_code === 401) {
-                return setError(data.detail)
+                setPassword("")
+                // setError("Credentials don't match any records")
+                
+                throw "Credentials don't match any records"
             }
 
             localStorage.setItem('access', data.access)
             localStorage.setItem('refresh', data.refresh)
 
+            if(data?.role?.toLowerCase() === 'student') {
+                
+                const res = await fetchRequest('student-profiles', 'GET')
+
+                console.log('res', res)
+
+                const profileId = res?.[0].id
+                const studentType = res?.[0].education_type
+
+                setData({
+                    profileId,
+                    studentType
+                })
+            }
+
             await fetch('/api/set-cookie', {
                 method: 'POST',
                 body: JSON.stringify({
-                    access: data.access
+                    access: data.access,
+                    role: data.role.toLowerCase()
                 })
             })
+
+            console.log('data', data)
 
             setData({
                 name: data.username,
                 email: emailAddress,
                 role: data.role,
-                userId: data.user_id
+                userId: data.user_id,
             })
             setError("")
-            router.push('/')
-        } catch (error) {
-            console.log('error signing in', error)
-            setError("Something went wrong")
+            router.push(data?.role?.toLowerCase() === 'student' ? '/student' : data?.role?.toLowerCase() === "admin" ? '/admin' : '/tutor')
+        } catch (rejection) {
+            console.log('error signing in', rejection)
+            setError(rejection as string)
         } finally {
             setIsLoading(false)
         }
@@ -127,7 +141,7 @@ export default function Signin() {
 
   return (
     <div className="h-full w-full flex flex-col justify-center items-center">
-        <section className="w-5/6 md:w-2/3">
+        <section className="w-5/6 md:w-2/3 max-w-[614px]">
             <div className="w-full">
                 <h1 className="poppins-bold text-6xl uppercase">
                     {signIn ? 'Sign in' : 'Sign up'}
@@ -194,7 +208,7 @@ export default function Signin() {
                 {signIn ? 'Sign in' : 'Sign up'}
             </Button>
 
-            <div className="w-full flex flex-row justify-between items-center mt-5">
+            <div className="w-full flex flex-row justify-between items-center mt-10">
                 <Button handleOnClick={toggleAuthMode} textBtn classes={"underline"}>
                     {signIn ? 'Create account' : 'Already have an account'}
                 </Button>
