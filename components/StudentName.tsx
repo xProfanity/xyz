@@ -20,9 +20,9 @@ export default function StudentName() {
     }
   return (
     <div className='inline-flex gap-5 justify-center items-center'>
-      <h1 className="poppins-bold text-gray-500">Hello <span className='capitalize'>{name}</span></h1>
+      <h1 className="poppins-bold text-gray-500 text-sm ">Hello <span className='capitalize'>{name}</span></h1>
       <button className='cursor-pointer' onClick={logout}>
-        <BiLogOut size={35} />
+        <BiLogOut size={20} />
       </button>
     </div>
   )

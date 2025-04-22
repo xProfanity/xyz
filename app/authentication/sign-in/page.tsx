@@ -143,18 +143,18 @@ export default function Signin() {
     <div className="h-full w-full flex flex-col justify-center items-center">
         <section className="w-5/6 md:w-2/3 max-w-[614px]">
             <div className="w-full">
-                <h1 className="poppins-bold text-6xl uppercase">
+                <h1 className="poppins-bold text-4xl uppercase">
                     {signIn ? 'Sign in' : 'Sign up'}
                 </h1>
-                <h1 className="poppins-semibold text-4xl capitalize mt-4">Enter your account details</h1>
+                <h1 className="poppins-semibold text-xl text-gray-500 lowercase">Enter your account details</h1>
             </div>
 
-            <div className="w-full mt-10">
+            <div className="w-full mt-4">
                 <Input
                     onChangeFn={({target})=>setEmailAddress(target.value)}
                     value={emailAddress}
                     classes="bg-gray-400"
-                    icon={<MdEmail size={35} />}
+                    icon={<MdEmail size={20} />}
                     placeholder="Email address"
                     required
                     type="email"
@@ -165,7 +165,7 @@ export default function Signin() {
                     onChangeFn={({target})=>setPassword(target.value)}
                     value={password}
                     classes="bg-gray-400 rounded-lg"
-                    icon={<TbPasswordUser size={35} />}
+                    icon={<TbPasswordUser size={20} />}
                     placeholder="Password"
                     required
                     type={`${showPassword ? "text" : "password"}`}
@@ -179,7 +179,7 @@ export default function Signin() {
                             onChangeFn={({target})=>setConfirmPassword(target.value)}
                             value={confirmPassword}
                             classes="bg-gray-400 rounded-lg"
-                            icon={<TbPasswordUser size={35} />}
+                            icon={<TbPasswordUser size={20} />}
                             placeholder="Confirm Password"
                             required
                             type={`${showPassword ? "text" : "password"}`}
@@ -189,22 +189,32 @@ export default function Signin() {
             }
 
             <div className="min-h-10 flex flex-col justify-center items-start">
-                <span className="text-red-500">{error}</span>
+                <span className="text-red-500 text-sm">{error}</span>
             </div>
             
-            <div className="flex flex-row gap-2 justify-start items-start">
+            <div className="flex flex-row gap-2 justify-start items-center">
                 <input
                     type="checkbox"
                     name="visibility"
                     id="visibility"
-                    className="w-5 h-5"
+                    className="w-4 h-4"
                     checked={showPassword}
                     onChange={()=>setShowPassword(!showPassword)}
                 />
-                <label htmlFor="visibility">Show Password</label>
+                <label htmlFor="visibility" className="text-sm">Show Password</label>
             </div>
 
-            <Button handleOnClick={signIn ? handleSignIn : handleSignUp} primary fullWidth classes={"mt-10"} loading={isLoading}>
+            <Button handleOnClick={() => {
+                if(password && emailAddress) {
+                    setError("")
+
+                    if(signIn) {
+                        return handleSignIn()
+                    } return handleSignUp()
+                }
+
+                return setError("Email and password required!")
+            }} primary fullWidth classes={"mt-10"} loading={isLoading}>
                 {signIn ? 'Sign in' : 'Sign up'}
             </Button>
 
@@ -215,7 +225,7 @@ export default function Signin() {
 
                 {
                     signIn && (
-                        <Link href={"/"} className="underline text-base">
+                        <Link href={"/"} className="underline text-sm ">
                             Forgot Password
                         </Link>
                     )

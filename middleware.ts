@@ -8,12 +8,34 @@ export async function middleware(request: NextRequest) {
 
     const link = request.nextUrl.pathname
 
+    console.log('link', link)
+
     if(!access?.value) {
         return NextResponse.redirect(new URL('/authentication/sign-in', request.url))
     }
 
-    if(role?.value === 'admin') {
-        console.log(`user is a ${role.value}`);
+    if(link === '/') {
+        return NextResponse.redirect(new URL(`/${role?.value}`, request.url))
+    }
+
+    if(role?.value === 'student' || role?.value === 'tutor') {
+        if(/^\/admin/.test(link)) {
+            const url = link.replace(/^\/admin/, `/${role.value}`)
+
+            return NextResponse.redirect(new URL(url, request.url))
+        }
+
+        if(role.value === 'student' && /^\/tutor/.test(link)) {
+            const url = link.replace(/^\/tutor/, `/${role.value}`)
+
+            return NextResponse.redirect(new URL(url, request.url))
+        }
+
+        if(role.value === 'tutor' && /^\/student/.test(link)) {
+            const url = link.replace(/^\/student/, `/${role.value}`)
+
+            return NextResponse.redirect(new URL(url, request.url))
+        }
     }
 
     return NextResponse.next()

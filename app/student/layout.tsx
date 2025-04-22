@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 
-import { BiCalendar } from "react-icons/bi";
-import { BsBell } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { HiBookOpen } from "react-icons/hi";
 import { MdOutlineSubject } from "react-icons/md";
@@ -27,35 +25,35 @@ export default function RootLayout({
     {
       name: 'dashboard',
       link: '/student',
-      icon: <RiHome4Fill size={35} />,
+      icon: <RiHome4Fill size={20} />,
     },
     {
       name: 'Subjects',
       link: '/student/subjects',
-      icon: <MdOutlineSubject size={35} />,
+      icon: <MdOutlineSubject size={20} />,
     },
     {
       name: 'Progress',
       link: '/student/progress',
-      icon: <RiProgress7Line size={35} />,
+      icon: <RiProgress7Line size={20} />,
     },
     {
       name: 'subscription',
       link: '/student/subscription',
-      icon: <TbCategory size={35} />,
+      icon: <TbCategory size={20} />,
     },
 ]
 
   return (
-        <div className="p-2">
+        <div className="px-2 w-auto ">
           <div className="h-auto w-full flex flex-col justify-center items-center">
-            <div className="w-full h-20 flex flex-row justify-between items-center">
+            <div className="w-full mx-auto h-16 flex flex-row justify-between items-center">
               <Image
                 src={"/logo.png"}
-                height={120}
-                width={120}
+                height={100}
+                width={80}
                 alt="Excellence Logo"
-                className="object-cover hidden md:block"
+                className="object-cover hidden md:block "
                 blurDataURL=""
               />
               <h1 className="block md:hidden poppins-semibold text-lg">Excellence</h1>
@@ -83,22 +81,23 @@ export default function RootLayout({
                     <div><HiBookOpen size={35} color="pink" /></div>
                   </div>
                 </div>
-                <div className="md:h-20 md:w-20 rounded-full md:border border-black flex flex-col justify-center items-center ml-4">
-                  <BiCalendar size={35} />
+                {/* <div className="rounded-full flex flex-col justify-center items-center ml-4">
+                  <BiCalendar size={20} />
                 </div>
-                <div className="md:h-20 md:w-20 rounded-full md:border border-black flex flex-col justify-center items-center ml-1">
-                  <BsBell size={35} />
-                </div>
+                <div className="rounded-full flex flex-col justify-center items-center ml-1">
+                  <BsBell size={20} />
+                </div> */}
               </div>
             </div>
           </div>
-          <div className="bg-[#FCF9FE]  rounded-3xl w-full p-2 md:p-8 mt-10">
-            <div className="flex flex-col md:flex-row justify-start md:justify-between md:items-center">
+          <div className="bg-[#FCF9FE] rounded-3xl w-full p-2 md:p-8 mt-10">
+            <div className="  flex flex-col md:flex-row justify-start md:justify-between md:items-center">
               <Header />
               <Filters />
             </div>
-            <main>{children}</main>
-            <section className="block md:hidden fixed bottom-0 left-0 w-full">
+            <main className="pb-24">{children}</main>
+
+            <section className="block md:hidden fixed bottom-0 left-0 w-full bg-[#FFFFFF] rounded-t-xl">
               <ul className="flex flex-row justify-around items-center py-6">
                 {studentNavLinks.map((link, index) => (
                   <NavLink name={link.name} link={link.link} icon={link.icon} index={index} key={index}/>
