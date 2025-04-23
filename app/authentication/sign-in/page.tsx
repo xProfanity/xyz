@@ -52,8 +52,6 @@ export default function Signin() {
                 
                 const res = await fetchRequest('student-profiles', 'GET')
 
-                console.log('res', res)
-
                 const profileId = res?.[0].id
                 const studentType = res?.[0].education_type
 
@@ -80,9 +78,10 @@ export default function Signin() {
                 userId: data.user_id,
             })
             setError("")
-            router.push(data?.role?.toLowerCase() === 'student' ? '/student' : data?.role?.toLowerCase() === "admin" ? '/admin' : '/tutor')
+            router.push(data?.role?.toLowerCase() === 'student' ? '/student' : data?.role?.toLowerCase() === "admin" ? '/admin' : '/instructor')
         } catch (rejection) {
             console.log('error signing in', rejection)
+            setPassword("")
             setError(rejection as string)
         } finally {
             setIsLoading(false)
@@ -133,6 +132,8 @@ export default function Signin() {
             router.push("/onboarding/username")
         } catch (error) {
             console.log('error', error)
+            setConfirmPassword("")
+            setPassword("")
             setError("Something went wrong")
         } finally {
             setIsLoading(false)
@@ -141,7 +142,7 @@ export default function Signin() {
 
   return (
     <div className="h-full w-full flex flex-col justify-center items-center">
-        <section className="w-5/6 md:w-2/3 max-w-[614px]">
+        <section className="w-5/6 md:w-2/3 max-w-[590px]">
             <div className="w-full">
                 <h1 className="poppins-bold text-4xl uppercase">
                     {signIn ? 'Sign in' : 'Sign up'}

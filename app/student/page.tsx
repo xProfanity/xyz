@@ -1,13 +1,21 @@
 "use client"
 
+import { Button } from "@/components";
 import useSchool from "@/hooks/useSchool";
+import { fetchQuizQuestionBySubject, submitAnswer } from "@/services/sanity";
 import { useUser } from "@/store";
+import { Question } from "@/types";
 import dayjs from "dayjs";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaPlane, FaPlaneDeparture } from "react-icons/fa";
 import { HiBookOpen } from "react-icons/hi";
+import { LuPlaneTakeoff } from "react-icons/lu";
+import { PiPaperPlane } from "react-icons/pi";
+import { URLSearchParams } from "url";
 
 export default function Home() {
-  const {studentType} = useUser((state) => state)
+  const {studentType, profileId, userId} = useUser((state) => state)
 
   return (
       <div className="flex flex-col-reverse md:grid md:grid-cols-5 gap-4 mt-4">
@@ -45,7 +53,7 @@ export default function Home() {
           </div>
         </div>
         <div className="col-span-3 bg-[#F0EFF4] rounded-3xl flex flex-col lg:grid lg:grid-cols-2 p-6 gap-4">
-          <div className="col-span-1">
+          <div className="col-span-1 grid gap-4">
             <div className="bg-[#F7D5EA] pb-10 rounded-3xl w-full p-4 flex flex-col justify-start items-start gap-4">
               <div className="flex w-full flex-row justify-between items-center poppins-semibold">
                 <h1>Progress</h1>
@@ -63,15 +71,25 @@ export default function Home() {
               </div>
             </div>
 
-          <div>
-            <Quizzes educationType={studentType} />
-          </div>
+            <div>
+              <Quizzes educationType={studentType} userId={userId} profileId={profileId as string | undefined} />
+            </div>
           </div>
           <div className="col-span-1">
             <WeekDates />
-            <div>core results</div>
-            <div>schedules</div>
-            <div>activities</div>
+            <SubjectProgress educationType={studentType} />
+            <div className="mt-8">
+              <h1 className="poppins-bold text-2xl">My schedules</h1>
+              <div className="mt-4">
+                <p className="text-gray-400 text-lg">your planned schedules and ongoing activities will appear will appear here.</p>
+              </div>
+
+              <div className="mt-4">
+                <Button handleOnClick={() => {}} primary classes={"rounded-lg"}>
+                  Start planning
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -130,19 +148,141 @@ const WeekDates = () => {
   )
 }
 
-interface QuizzesProps {
-  educationType: "professional" | "secondary"
+interface SubjectsProps {
+  educationType: "professional" | "secondary" | undefined
+  userId?: string | undefined
+  profileId?: string | undefined
 }
 
-const Quizzes = ({educationType}: QuizzesProps) => {
+const Quizzes = ({educationType, userId, profileId}: SubjectsProps) => {
   const {getSubjects: subjects} = useSchool(educationType)
+  const [quiz, setQuiz] = useState<Question | null>(null)
+  const [activeSubject, setActiveSubject] = useState("")
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [sending, setIsSending] = useState(false)
+
+  const [answer, setAnswer] = useState("")
+
+  const handleSendAnswer = async () => {
+    try {
+      setIsSending(true)
+      await submitAnswer(
+        answer,
+        userId as string,
+        profileId as string,
+        quiz as Question
+      )
+
+      await handleSetQuiz(activeSubject)
+    } catch (error) {
+      console.log('error', error)
+    } finally {
+      setIsSending(false)
+    }
+  }
+
+  const handleSetQuiz = async (subject: string) => {
+    try {
+      setIsLoading(true)
+      const response = await fetchQuizQuestionBySubject(subject, userId as string)
+      setActiveSubject(subject)
+      setQuiz(response)
+      setAnswer("")
+    } catch (error) {
+      console.log('error', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    const getQuiz = async () => {
+      await handleSetQuiz(subjects()?.[0].subject as string)
+    }
+
+    getQuiz()
+  }, [])
 
   return (
     
-    <div>
-      {subjects().map((subject, index) => (
-        <p>{subject}</p>
-      ))}
+    <div className="flex flex-row flex-wrap gap-2">
+      {!subjects() ? (
+        <p>Loading ...</p>
+      ) : (
+        subjects()?.map(({subject}, index) => (
+          <>
+            <button key={index} className={`py-2 px-4 rounded-full ${activeSubject === subject ? 'bg-[#EFB9EE]' : 'bg-black'} cursor-pointer`} onClick={()=>handleSetQuiz(subject)}>
+              <p className="text-white text-lg font-semibold">{subject}</p>
+            </button>
+          </>
+        ))
+      )}
+
+      {
+        subjects() && !isLoading && (
+          !quiz ? (
+            <p className="text-gray-400 text-lg mt-2">Select a subject to start quick Quizzes</p>
+          ) : (
+            <div>
+              <p className="text-gray-500 text-lg mt-2">{quiz.question}</p>
+
+              <div className="inline-flex w-full">
+                <input
+                  type="text"
+                  className="border-b border-black p-1 mt-4 w-full outline-none"
+                  placeholder="Write your answer here"
+                  value={answer}
+                  onChange={({target}) => setAnswer(target.value)}
+                />
+                <button
+                  type="button"
+                  className="border-b border-black cursor-pointer outline-0"
+                  disabled={answer === "" || sending}
+                  onClick={handleSendAnswer}
+                >
+                  {sending ? (
+                    <>
+                      <LuPlaneTakeoff size={30} color={"#D991B7"} />
+                    </>
+                  ) : (
+                    <>
+                      <PiPaperPlane size={30} color={answer ? "#D991B7" : "gray"} className="rotate-45" />
+                    </>
+                  )}
+                </button>
+              </div>
+            </div> 
+          )
+        )
+      }
+      {
+        isLoading && (
+          <p className="text-gray-400 text-lg mt-2">Loading ...</p>
+        )
+      }
+    </div>
+  )
+}
+
+const SubjectProgress = ({educationType}: SubjectsProps) => {
+  
+  const {getSubjects: subjects} = useSchool(educationType)
+
+  return (
+    <div className="flex flex-row flex-wrap gap-2 mt-4">
+      {
+        !subjects() ? (
+          <p>Loading ...</p>
+        ) : (
+          subjects()?.map(({subject, grade}, index) => (
+            <div key={index} className="rounded-full px-6 py-2 flex flex-col justify-center items-center bg-[#EFB9EE]">
+              <p className="font-black">{subject}</p>
+              <p className="font-mono text-white text-xl">{grade.toFixed(1)}</p>
+            </div>
+          ))
+        )
+      }
     </div>
   )
 }

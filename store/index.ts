@@ -4,11 +4,11 @@ import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
 interface User {
-    userId: number
+    userId: string
     name: string
     email: string
     role: string
-    studentType: string
+    studentType: "professional" | "secondary"
     profileId: string | null
 }
 

@@ -46,7 +46,7 @@ export default function RootLayout({
 
   return (
         <div className="px-2 w-auto ">
-          <div className="h-auto w-full flex flex-col justify-center items-center">
+          <div className="h-auto w-full flex flex-col justify-center items-center bg-[#F0EFF4] shadow">
             <div className="w-full mx-auto h-16 flex flex-row justify-between items-center">
               <Image
                 src={"/logo.png"}
@@ -95,7 +95,7 @@ export default function RootLayout({
               <Header />
               <Filters />
             </div>
-            <main className="pb-24">{children}</main>
+            <main className="md:pb-0 pb-24">{children}</main>
 
             <section className="block md:hidden fixed bottom-0 left-0 w-full bg-[#FFFFFF] rounded-t-xl">
               <ul className="flex flex-row justify-around items-center py-6">

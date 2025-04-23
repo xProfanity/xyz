@@ -1,32 +1,10 @@
 "use client"
 
 import useFetch from "@/hooks/useFetch"
+import { StudentProfile, TutorProfile } from "@/types"
 import { useEffect, useState } from "react"
 import { BsFilter } from "react-icons/bs"
 
-interface StudentProfile {
-  id: number
-  user: number
-  education_type: string
-  is_active: boolean
-  date_joined: string
-}
-
-interface TutorProfile {
-  id: number
-  user: {
-    id: number
-    name: string
-    email: string
-  }
-  bio: string
-  profile_picture: string
-  education_types: string[]
-  courses: string[]
-  qualifications: string
-  is_active: boolean
-  date_joined: string
-}
 
 export default function Admin() {
   const [students, setStudents] = useState<StudentProfile[]>([])
