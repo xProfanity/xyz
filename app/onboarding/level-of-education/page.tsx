@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function StudentType() {
-    const [studentType, setStudentType] = useState('')
+    const [studentType, setStudentType] = useState<"professional" | "secondary" | undefined>()
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
 
