@@ -15,6 +15,12 @@ interface User {
 type UserState = Partial<User> & {
     setData: (data: Partial<User>) => void
 }
+
+interface Sidebar {
+    isOpen: boolean
+    openSidebar: () => void
+    closeSidebar: () => void
+}
   
 export const useUser = create<UserState>()(
     persist(
@@ -26,3 +32,11 @@ export const useUser = create<UserState>()(
         }
     )
 )
+
+export const useSideBar = create<Sidebar>()((set) => ({
+    isOpen: false,
+    openSidebar: () => set(() => ({isOpen: true})),
+    closeSidebar() {
+        set(() => ({isOpen: false}))
+    },
+}))

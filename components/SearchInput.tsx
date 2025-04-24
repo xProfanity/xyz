@@ -9,7 +9,7 @@ interface Props {
 
 export default function SearchInput({classes}: Props) {
   return (
-    <div className="w-full hidden md:block">
+    <div className="w-full block">
         <Input
             onChangeFn={()=>{}}
             value=""

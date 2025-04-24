@@ -119,6 +119,10 @@ export default function Signin() {
                 return setError("Error creating user")
             }
 
+            if(data.status_code === 400) {
+                throw "User with this email already exists"
+            }
+
             localStorage.setItem('refresh', token.refresh)
             localStorage.setItem('access', token.access)
 

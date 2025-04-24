@@ -19,7 +19,7 @@ export default function StudentName() {
       router.push('/authentication/sign-in')
     }
   return (
-    <div className='inline-flex gap-5 justify-center items-center'>
+    <div className='flex flex-col md:flex-row gap-5 justify-center items-center'>
       <h1 className="poppins-bold text-gray-500 text-sm ">Hello <span className='capitalize'>{name}</span></h1>
       <button className='cursor-pointer' onClick={logout}>
         <BiLogOut size={20} />

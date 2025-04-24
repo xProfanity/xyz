@@ -8,5 +8,7 @@ import SidebarLink from "./SidebarLink";
 import Stage from "./Stage";
 import StudentName from "./StudentName";
 import UserProfileFooter from "./UserProfileFooter";
+import HamburgerMenu from "./HamburgerMenu";
+import Sidebar from "./Sidebar";
 
-export { Button, Filters, Header, Input, NavLink, SearchInput, SidebarLink, Stage, StudentName, UserProfileFooter };
+export { Button, Sidebar, Filters, HamburgerMenu, Header, Input, NavLink, SearchInput, SidebarLink, Stage, StudentName, UserProfileFooter };

@@ -7,7 +7,7 @@ import { MdOutlineSubject } from "react-icons/md";
 import { RiHome4Fill, RiProgress7Line } from "react-icons/ri";
 import { TbCategory } from "react-icons/tb";
 
-import { Filters, Header, NavLink, StudentName } from "@/components";
+import { Filters, HamburgerMenu, Header, NavLink, Sidebar, StudentName } from "@/components";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -45,8 +45,9 @@ export default function RootLayout({
 ]
 
   return (
-        <div className="px-2 w-auto ">
-          <div className="h-auto w-full flex flex-col justify-center items-center bg-[#F0EFF4] shadow">
+        <div className="sm:px-2 w-auto relative block">
+          <Sidebar />
+          <div className="relative px-2 sm:px-0 h-auto w-full flex flex-col justify-center items-center bg-[#F0EFF4] shadow">
             <div className="w-full mx-auto h-16 flex flex-row justify-between items-center">
               <Image
                 src={"/logo.png"}
@@ -67,9 +68,7 @@ export default function RootLayout({
                 </ul>
               </div>
               <div className="flex md:hidden">
-                <button>
-                  <GiHamburgerMenu size={35} />
-                </button>
+                <HamburgerMenu />
               </div>
               <div className="hidden md:flex flex-row justify-center items-center">
                 <div className="flex flex-col justify-center items-end">
@@ -90,8 +89,8 @@ export default function RootLayout({
               </div>
             </div>
           </div>
-          <div className="bg-[#FCF9FE] rounded-3xl w-full p-2 md:p-8 mt-10">
-            <div className="  flex flex-col md:flex-row justify-start md:justify-between md:items-center">
+          <div className="bg-[#FCF9FE] rounded-3xl w-full p-2 md:p-8 mt-0 md:mt-10">
+            <div className="hidden  md:flex flex-col md:flex-row justify-start md:justify-between md:items-center">
               <Header />
               <Filters />
             </div>
@@ -105,6 +104,7 @@ export default function RootLayout({
               </ul>
             </section>
           </div>
+
         </div>
   );
 }
