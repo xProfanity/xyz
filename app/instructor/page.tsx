@@ -24,6 +24,8 @@ export default function Tutor() {
         const answers = await fetchAnswers(userId)
         const students = await fetchRequest('student-profiles', 'GET')
 
+        console.log('students', students)
+
         setQuestions(questions)
         setAnswers(answers)
         setStudents(students)

@@ -48,6 +48,17 @@ export default function Signin() {
             localStorage.setItem('access', data.access)
             localStorage.setItem('refresh', data.refresh)
 
+            try {
+                if(!JSON.parse(data?.username)) {
+                    setData({
+                        email: emailAddress
+                    })
+                    return router.push("/on-boarding-instructor")
+                }
+            } catch (error) {
+                                
+            }
+
             if(data?.role?.toLowerCase() === 'student') {
                 
                 const res = await fetchRequest('student-profiles', 'GET')
@@ -68,8 +79,6 @@ export default function Signin() {
                     role: data.role.toLowerCase()
                 })
             })
-
-            console.log('data', data)
 
             setData({
                 name: data.username,
@@ -138,7 +147,7 @@ export default function Signin() {
             console.log('error', error)
             setConfirmPassword("")
             setPassword("")
-            setError("Something went wrong")
+            setError(error as string)
         } finally {
             setIsLoading(false)
         }

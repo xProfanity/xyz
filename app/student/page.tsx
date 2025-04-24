@@ -6,13 +6,10 @@ import { fetchQuizQuestionBySubject, submitAnswer } from "@/services/sanity";
 import { useUser } from "@/store";
 import { Question } from "@/types";
 import dayjs from "dayjs";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FaPlane, FaPlaneDeparture } from "react-icons/fa";
 import { HiBookOpen } from "react-icons/hi";
 import { LuPlaneTakeoff } from "react-icons/lu";
 import { PiPaperPlane } from "react-icons/pi";
-import { URLSearchParams } from "url";
 
 export default function Home() {
   const {studentType, profileId, userId} = useUser((state) => state)
@@ -211,11 +208,9 @@ const Quizzes = ({educationType, userId, profileId}: SubjectsProps) => {
         <p>Loading ...</p>
       ) : (
         subjects()?.map(({subject}, index) => (
-          <>
-            <button key={index} className={`py-2 px-4 rounded-full ${activeSubject === subject ? 'bg-[#EFB9EE]' : 'bg-black'} cursor-pointer`} onClick={()=>handleSetQuiz(subject)}>
-              <p className="text-white text-lg font-semibold">{subject}</p>
-            </button>
-          </>
+          <button key={index} className={`py-2 px-4 rounded-full ${activeSubject === subject ? 'bg-[#EFB9EE]' : 'bg-black'} cursor-pointer`} onClick={()=>handleSetQuiz(subject)}>
+            <p className="text-white text-lg font-semibold">{subject}</p>
+          </button>
         ))
       )}
 

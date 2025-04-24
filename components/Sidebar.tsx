@@ -12,8 +12,6 @@ import StudentName from './StudentName'
 export default function Sidebar() {
   const {isOpen, closeSidebar} = useSideBar()
 
-  console.log('isOpen', isOpen)
-
   return (
     <motion.section
       className={`fixed h-screen w-full px-4 flex flex-col justify-between items-center md:hidden top-0 z-50 left-full bg-[#FCF9FE]`}

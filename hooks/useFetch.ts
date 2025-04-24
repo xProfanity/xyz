@@ -10,7 +10,6 @@ export default function useFetch() {
 
     const fetchRequest = async (endpoint: string, method: string, body?: string | null) => {
 
-        console.log('pathname', pathname)
         if(!localStorage.getItem('access') && pathname !== '/authentication/sign-in') {
             localStorage.removeItem('refresh')
             localStorage.removeItem('user')
@@ -41,8 +40,7 @@ export default function useFetch() {
 
             return data
         } catch (error) {
-            console.log('error', error)
-            throw "Server error"
+            throw error
         }
     }
 
