@@ -1,3 +1,4 @@
+
 import { BASEURL } from "@/constants"
 
 export const refreshToken = async (refresh: string, access: string) => {
@@ -19,7 +20,7 @@ export const refreshToken = async (refresh: string, access: string) => {
 
         const data = await response.json()
 
-        console.log('data tokens', data)
+        if(data.status_code === 401) throw "unauthorized"
 
         return {
             refresh: data?.refresh,

@@ -2,11 +2,12 @@
 
 import { refreshToken } from "@/app/api"
 import { BASEURL } from "@/constants"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 export default function useFetch() {
 
     const pathname = usePathname()
+    const router = useRouter()
 
     const fetchRequest = async (endpoint: string, method: string, body?: string | null) => {
 
@@ -31,11 +32,20 @@ export default function useFetch() {
             const data = await response.json()
 
             if(data.status_code === 401 && pathname !== '/authentication/sign-in') {
-                const token = await refreshToken(localStorage.getItem('refresh') as string, localStorage.getItem('access') as string)
-                localStorage.setItem('access', token?.access)
-                localStorage.setItem('refresh', token?.refresh)
+                try {
+                    const token = await refreshToken(localStorage.getItem('refresh') as string, localStorage.getItem('access') as string)
+                    
+                    localStorage.setItem('access', token?.access)
+                    localStorage.setItem('refresh', token?.refresh)
+    
+                    return await fetchRequest(endpoint, method, body)
+                } catch (error) {
+                    localStorage.removeItem("access")
+                    localStorage.removeItem("refresh")
+                    localStorage.removeItem("user")
 
-                return await fetchRequest(endpoint, method, body)
+                    return router.push("/authentication/sign-in")
+                }
             }
 
             return data

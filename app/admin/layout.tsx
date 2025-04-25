@@ -2,10 +2,12 @@ import { NavLink, SearchInput, SidebarLink, UserProfileFooter } from '@/componen
 import Image from 'next/image'
 import React from 'react'
 import { BiHome } from 'react-icons/bi'
+import { FaCashRegister } from 'react-icons/fa'
 import { MdManageAccounts, MdOutlineSubject } from 'react-icons/md'
 import { RiProgress7Line } from 'react-icons/ri'
 import { SlSettings } from 'react-icons/sl'
-import { TbCategory } from 'react-icons/tb'
+import { TbCategory, TbRegistered } from 'react-icons/tb'
+import { TfiWrite } from 'react-icons/tfi'
 
 export default function AdminLayout({children}: {children: React.ReactNode}) {
   const notifications = null
@@ -16,34 +18,14 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
       icon: <BiHome size={25} />,
     },
     {
-      name: 'communication & support',
-      link: '/admin/communication',
+      name: 'manage instructors',
+      link: '/admin/instructors',
       icon: <TbCategory size={25} />,
     },
     {
-      name: 'reports & analytics',
-      link: '/admin/reports',
-      icon: <TbCategory size={25} />,
-    },
-    {
-      name: 'users',
-      link: '/admin/users',
-      icon: <MdManageAccounts size={25} />,
-    },
-    {
-      name: 'courses',
-      link: '/admin/courses',
-      icon: <MdOutlineSubject size={25} />,
-    },
-    {
-      name: 'content',
-      link: '/admin/content',
-      icon: <RiProgress7Line size={25} />,
-    },
-    {
-      name: 'subscriptions',
-      link: '/admin/subscriptions',
-      icon: <SlSettings size={25} />,
+      name: 'register instructor',
+      link: '/admin/register',
+      icon: <TfiWrite size={25} />,
     },
   ]
   return (
