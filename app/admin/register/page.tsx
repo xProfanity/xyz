@@ -2,12 +2,16 @@
 
 import { Button, Input } from '@/components'
 import useFetch from '@/hooks/useFetch'
+import { p } from 'framer-motion/client'
 import React, { useState } from 'react'
 
 export default function Register() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+
+    const [error, setError] = useState("")
+    const [success, setSuccess] = useState("")
 
     const {fetchRequest} = useFetch()
 
@@ -23,8 +27,13 @@ export default function Register() {
                     name: 'null'
                 })
             )
+
+            setError("")
+            setSuccess(`Successfully registered ${email} with password ${password}`)
         } catch (error) {
             console.log('error', error)
+            setSuccess("")
+            setError("Something went wrong")
         } finally {
             setIsLoading(false)
         }
@@ -49,9 +58,18 @@ export default function Register() {
             value={password}
             placeholder='sign up password'
             required
-            type='password'
+            type='text'
             classes='mx-auto mt-4'
         />
+
+        <div className='mt-4'>
+            {error && (
+                <p className='text-red-500'>{error}</p>
+            )}
+            {success && (
+                <p className='text-green-500'>{success}</p>
+            )}
+        </div>
 
         <Button
             handleOnClick={handleRegisterUser}

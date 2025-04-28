@@ -24,9 +24,9 @@ export default function Answers() {
     }, [userId])
 
   return (
-    <section className='flex flex-col justify-start items-start relative overflow-y-scroll'>
-      <div className="w-full mt-5 relative overflow-y-scroll">
-        <div className="grid grid-cols-5 bg-gray-100 h-12">
+    <section className='flex flex-col justify-start items-start relative'>
+      <div className="w-full mt-5 relative">
+        <div className="grid grid-cols-5 bg-gray-100 h-12 justify-center items-center">
           <h1 className="col-span-1 text-center">Student ID</h1>
           <h1 className="col-span-1 text-center">Level</h1>
           <h1 className="col-span-1 text-center">Subject</h1>
