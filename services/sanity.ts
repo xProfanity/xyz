@@ -1,6 +1,22 @@
 import { Question } from "@/types"
 import { client } from "@/utils/sanity"
 
+export async function fetchAllQuestions() {
+    const query = `*[_type == "question"]`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
+export async function fetchQuestionById(id: string) {
+    const query = `*[_type == "question" && _id == "${id}"][0]`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
 export async function fetchQuestions(id: string | undefined) {
     console.log('id', id)
     const query = `*[_type == "question" && instructorId == "${id}"] | order(_createdAt)`
@@ -18,6 +34,14 @@ export async function fetchAnswers(id: string | undefined) {
                         }
                     }
                 `
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
+export async function fetchAnswersByQuestion(questionId: string) {
+    const query = `*[_type == "answer" && !grade && question -> _id == "${questionId}"]`
 
     const result = await client.fetch(query)
 
@@ -47,7 +71,7 @@ export async function submitAnswer(answer: string, studentId: string, profileId:
     })
 
     await client
-    .patch(question._id)
+    .patch(question._id as string)
     .setIfMissing({submissions: []})
     .insert(
         "after",
@@ -55,4 +79,11 @@ export async function submitAnswer(answer: string, studentId: string, profileId:
         [studentId.toString()]
     )
     .commit()
+}
+
+export async function gradeAnswer(answerId: string, comment: string, grade: number) {
+    await client
+        .patch(answerId)
+        .set({comment, grade})
+        .commit()
 }

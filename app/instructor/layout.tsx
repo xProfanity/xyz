@@ -1,11 +1,19 @@
 import { NavLink, SearchInput, SidebarLink, UserProfileFooter } from '@/components'
 import Image from 'next/image'
 import React from 'react'
-import { BiHome } from 'react-icons/bi'
-import { MdManageAccounts, MdOutlineSubject } from 'react-icons/md'
+import { BiHome, BiReply } from 'react-icons/bi'
+import { CgMenuLeft, CgMenuLeftAlt, CgMenuRight } from 'react-icons/cg'
+import { MdManageAccounts, MdOutlineSubject, MdQuestionAnswer } from 'react-icons/md'
 import { RiProgress7Line } from 'react-icons/ri'
 import { SlSettings } from 'react-icons/sl'
 import { TbCategory } from 'react-icons/tb'
+import InstructorHeader from './InstructorHeader'
+import InstructorSidebar from '@/components/InstructorSidebar'
+import { PiNotePencil } from 'react-icons/pi'
+import { FcAnswers } from 'react-icons/fc'
+import { SiAnswer } from 'react-icons/si'
+import { DiResponsive } from 'react-icons/di'
+import { VscReply } from 'react-icons/vsc'
 
 export default function AdminLayout({children}: {children: React.ReactNode}) {
   const notifications = null
@@ -18,38 +26,19 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
     {
       name: 'manage questions',
       link: '/instructor/questions',
-      icon: <TbCategory size={25} />,
+      icon: <PiNotePencil size={25} />,
     },
     {
       name: 'answers submitted',
       link: '/instructor/answers',
-      icon: <TbCategory size={25} />,
+      icon: <VscReply size={25} />,
     },
-    // {
-    //   name: 'users',
-    //   link: '/tutor/users',
-    //   icon: <MdManageAccounts size={25} />,
-    // },
-    // {
-    //   name: 'courses',
-    //   link: '/tutor/courses',
-    //   icon: <MdOutlineSubject size={25} />,
-    // },
-    // {
-    //   name: 'content',
-    //   link: '/tutor/content',
-    //   icon: <RiProgress7Line size={25} />,
-    // },
-    // {
-    //   name: 'subscriptions',
-    //   link: '/tutor/subscriptions',
-    //   icon: <SlSettings size={25} />,
-    // },
   ]
   return (
-      <div className='relative flex flex-row justify-start items-start divide-x divide-gray-300'>
-        <section className='h-screen w-[20%] flex flex-col'>
-          <div className='h-full w-full p-2 flex flex-col divide-gray-200 divide-y'>
+      <div className='relative flex flex-row justify-start items-start'>
+        <InstructorSidebar navlink={navLinks} />
+        <section className='h-screen fixed top-0 left-0 w-[20%] hidden md:flex flex-col bg-gray-200'>
+          <div className='h-full w-full p-2 flex flex-col'>
             <div className='h-20 inline-flex justify-start items-center'>
               <Image
                 src={"/logo.png"}
@@ -83,10 +72,9 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
             </div>
           </div>
         </section>
-        <section className='min-h-screen w-[80%] flex flex-col p-2'>
-          <section className='h-20 w-full p-2 flex flex-row-reverse justify-between items-center'>
-              <SearchInput classes='h-2' />
-          </section>
+        <section className='min-h-screen w-full md:w-4/5 flex flex-col p-2 md:absolute md:left-1/5'>
+          <InstructorHeader />
+
           <main className=''>
               {children}
           </main>

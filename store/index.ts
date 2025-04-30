@@ -33,10 +33,16 @@ export const useUser = create<UserState>()(
     )
 )
 
-export const useSideBar = create<Sidebar>()((set) => ({
+export const useStudentSideBar = create<Sidebar>()((set) => ({
     isOpen: false,
     openSidebar: () => set(() => ({isOpen: true})),
     closeSidebar() {
         set(() => ({isOpen: false}))
     },
+}))
+
+export const useInstructorSidebar = create<Sidebar>((set) => ({
+    isOpen: false,
+    openSidebar: () => set(() => ({isOpen: true})),
+    closeSidebar: () => set(() => ({isOpen: false}))
 }))

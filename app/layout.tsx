@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import 'react-loading-skeleton/dist/skeleton.css'
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -15,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
         <body className="">
+            <Toaster position="bottom-right" />
             {children}
         </body>
     </html>

@@ -12,6 +12,8 @@ export default function Admin() {
 
   const {fetchRequest} = useFetch()
 
+  console.log('students', students)
+
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -1,4 +1,11 @@
-export interface Question {
+export interface SanityObject {
+  _id: string
+  _type: string
+  _createdAt: string | number | Date
+  _updatedAt: string | number | Date
+}
+
+export type Question = Partial<SanityObject> & {
     question: string
     form: string | null
     level: string | null
@@ -6,7 +13,6 @@ export interface Question {
     subject: string
     educationType: string
     submissions: string[] | null
-    _id: string
 }
 
 export type Answer = Partial<Question> & {
@@ -14,6 +20,8 @@ export type Answer = Partial<Question> & {
     studentId: string
     profileId: string
     question: Question
+    grade: number
+    comment: string
 }
 
 export interface StudentProfile {

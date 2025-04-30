@@ -6,9 +6,12 @@ import { fetchQuizQuestionBySubject, submitAnswer } from "@/services/sanity";
 import { useUser } from "@/store";
 import { Question } from "@/types";
 import dayjs from "dayjs";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { CgMaximize } from "react-icons/cg";
 import { HiBookOpen } from "react-icons/hi";
 import { LuPlaneTakeoff } from "react-icons/lu";
+import { MdMaximize } from "react-icons/md";
 import { PiPaperPlane } from "react-icons/pi";
 
 export default function Home() {
@@ -230,6 +233,17 @@ const Quizzes = ({educationType, userId, profileId}: SubjectsProps) => {
                   value={answer}
                   onChange={({target}) => setAnswer(target.value)}
                 />
+
+                <button
+                  className="border-b border-black cursor-pointer outline-0 hidden md:block"
+                >
+                  <Link
+                    href={""}
+                  >
+                    <CgMaximize size={30} color="gray" />
+                  </Link>
+                </button>
+
                 <button
                   type="button"
                   className="border-b border-black cursor-pointer outline-0"
@@ -242,7 +256,7 @@ const Quizzes = ({educationType, userId, profileId}: SubjectsProps) => {
                     </>
                   ) : (
                     <>
-                      <PiPaperPlane size={30} color={answer ? "#D991B7" : "gray"} className="rotate-45" />
+                      <PiPaperPlane size={30} color={answer ? "#D991B7" : "gray"} className="rotate-90" />
                     </>
                   )}
                 </button>

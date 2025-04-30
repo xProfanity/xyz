@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 
-import { GiHamburgerMenu } from "react-icons/gi";
+import { GiChoice, GiHamburgerMenu } from "react-icons/gi";
 import { HiBookOpen } from "react-icons/hi";
 import { MdOutlineSubject } from "react-icons/md";
 import { RiHome4Fill, RiProgress7Line } from "react-icons/ri";
@@ -9,6 +9,12 @@ import { TbCategory } from "react-icons/tb";
 
 import { Filters, HamburgerMenu, Header, NavLink, Sidebar, StudentName } from "@/components";
 import "../globals.css";
+import { CiSettings } from "react-icons/ci";
+import { GrSchedule } from "react-icons/gr";
+import { FcWorkflow } from "react-icons/fc";
+import { BsQuestionOctagon } from "react-icons/bs";
+import { BiNote } from "react-icons/bi";
+import { LuNotebookPen } from "react-icons/lu";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -16,21 +22,17 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+  children, modal
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
 
   const studentNavLinks = [
     {
-      name: 'dashboard',
-      link: '/student',
-      icon: <RiHome4Fill size={20} />,
-    },
-    {
-      name: 'Subjects',
-      link: '/student/subjects',
-      icon: <MdOutlineSubject size={20} />,
+      name: 'questions',
+      link: '/student/questions',
+      icon: <LuNotebookPen size={20} />,
     },
     {
       name: 'Progress',
@@ -38,9 +40,14 @@ export default function RootLayout({
       icon: <RiProgress7Line size={20} />,
     },
     {
-      name: 'subscription',
-      link: '/student/subscription',
-      icon: <TbCategory size={20} />,
+      name: 'schedule',
+      link: '/student/schedule',
+      icon: <GrSchedule size={20} />,
+    },
+    {
+      name: 'settings',
+      link: '/student/settings',
+      icon: <CiSettings size={20} />,
     },
 ]
 
@@ -54,19 +61,10 @@ export default function RootLayout({
                 height={100}
                 width={80}
                 alt="Excellence Logo"
-                className="object-cover hidden md:block "
+                className="object-cover block"
                 blurDataURL=""
               />
-              <h1 className="block md:hidden poppins-semibold text-lg">Excellence</h1>
-              <div className="hidden md:block">
-                <ul className="flex flex-row gap-6">
-                  {studentNavLinks.map((link, index) => (
-                    <li className="" key={index}>
-                      <NavLink name={link.name} link={link.link} icon={link.icon} index={index} />
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              
               <div className="flex md:hidden">
                 <HamburgerMenu />
               </div>
@@ -104,7 +102,7 @@ export default function RootLayout({
               </ul>
             </section>
           </div>
-
+          {modal}
         </div>
   );
 }

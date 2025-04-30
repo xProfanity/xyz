@@ -10,5 +10,6 @@ import StudentName from "./StudentName";
 import UserProfileFooter from "./UserProfileFooter";
 import HamburgerMenu from "./HamburgerMenu";
 import Sidebar from "./Sidebar";
+import DataSection from "./DataSection";
 
-export { Button, Sidebar, Filters, HamburgerMenu, Header, Input, NavLink, SearchInput, SidebarLink, Stage, StudentName, UserProfileFooter };
+export { Button, DataSection, Sidebar, Filters, HamburgerMenu, Header, Input, NavLink, SearchInput, SidebarLink, Stage, StudentName, UserProfileFooter };

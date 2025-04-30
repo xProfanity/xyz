@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link";
-import { useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import { MdEmail } from "react-icons/md";
 import { TbPasswordUser } from "react-icons/tb";
 
@@ -28,6 +28,8 @@ export default function Signin() {
     const {fetchRequest} = useFetch()
 
     const toggleAuthMode = () => setSignIn(!signIn)
+
+    const formSection = useRef<ReactElement>(null)
 
     const handleSignIn = async () => {
         try {

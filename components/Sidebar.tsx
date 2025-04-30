@@ -1,6 +1,6 @@
 "use client"
 
-import { useSideBar } from '@/store'
+import { useStudentSideBar } from '@/store'
 import React, { useEffect } from 'react'
 import {motion} from "framer-motion" 
 import Image from 'next/image'
@@ -10,7 +10,7 @@ import Filters from './Filters'
 import StudentName from './StudentName'
 
 export default function Sidebar() {
-  const {isOpen, closeSidebar} = useSideBar()
+  const {isOpen, closeSidebar} = useStudentSideBar()
 
   return (
     <motion.section
@@ -46,8 +46,6 @@ export default function Sidebar() {
       <div className='mt-4 w-full pb-20'>
         <StudentName />
       </div>
-
-
     </motion.section>
   )
 }
