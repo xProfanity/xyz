@@ -37,7 +37,7 @@ export default function Tutor() {
   return (
     <section className='flex flex-col justify-start items-start'>
       <div className='flex flex-row justify-between items-center w-full'>
-        <div className='p-10 '>
+        <div className='p-4 '>
           <h1 className='poppins-bold text-lg'>Hello, {name}</h1>
           <p className='text-gray-400'>form, submit questions, and grade answers on this platform</p>
         </div>
@@ -47,7 +47,7 @@ export default function Tutor() {
         </Button>
       </div> 
 
-      <div className='p-10  mt-4 w-full'>
+      <div className='p-4  mt-4 w-full'>
         {
           loading ? (
             <div className='flex flex-row'>
@@ -65,7 +65,7 @@ export default function Tutor() {
             </div>
           ) : (
             <>
-              {questions ? (
+              {!!questions?.length ? (
                 <DataSection
                   header="your questions"
                   data={questions as any[]}
