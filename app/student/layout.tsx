@@ -22,11 +22,9 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children, modal
+  children
 }: Readonly<{
-  children: React.ReactNode;
-  modal: React.ReactNode;
-}>) {
+  children: React.ReactNode}>) {
 
   const studentNavLinks = [
     {
@@ -102,7 +100,6 @@ export default function RootLayout({
               </ul>
             </section>
           </div>
-          {modal}
         </div>
   );
 }
