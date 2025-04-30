@@ -88,21 +88,25 @@ export async function gradeAnswer(answerId: string, comment: string, grade: numb
         .commit()
 }
 
-// export async function clientSubmitAnswer(questionId: string , answer: string, studentId: string, profileId: string) {
-//     const doc = {
-//         _type: 'answer',
-//         answer,
-//         question: {
-//             _ref: questionId,
-//             _type: 'question'
-//         },
-//         studentId,
-//         profileId
-//     }
-    
-//     await client.create(doc)
+export async function createQuestion(
+    question: string,
+    educationType: string,
+    subject: string | null,
+    course: string | null,
+    form: string | null,
+    level: string | null,
+    instructorId: string
+) {
+    const doc = {
+        _type: 'question',
+        question,
+        educationType,
+        subject,
+        course,
+        form,
+        level,
+        instructorId
+    }
 
-//     await client
-//         .patch(questionId)
-//         .setIfMissing({sub})
-// }
+    await client.create(doc)
+}

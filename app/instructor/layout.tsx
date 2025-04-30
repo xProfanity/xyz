@@ -3,7 +3,7 @@ import Image from 'next/image'
 import React from 'react'
 import { BiHome, BiReply } from 'react-icons/bi'
 import { CgMenuLeft, CgMenuLeftAlt, CgMenuRight } from 'react-icons/cg'
-import { MdManageAccounts, MdOutlineSubject, MdQuestionAnswer } from 'react-icons/md'
+import { MdManageAccounts, MdOutlineCreate, MdOutlineSubject, MdQuestionAnswer } from 'react-icons/md'
 import { RiProgress7Line } from 'react-icons/ri'
 import { SlSettings } from 'react-icons/sl'
 import { TbCategory } from 'react-icons/tb'
@@ -14,6 +14,7 @@ import { FcAnswers } from 'react-icons/fc'
 import { SiAnswer } from 'react-icons/si'
 import { DiResponsive } from 'react-icons/di'
 import { VscReply } from 'react-icons/vsc'
+import { IoCreate, IoCreateOutline } from 'react-icons/io5'
 
 export default function AdminLayout({children}: {children: React.ReactNode}) {
   const notifications = null
@@ -22,6 +23,11 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
       name: 'home',
       link: '/instructor',
       icon: <BiHome size={25} />,
+    },
+    {
+      name: 'create question',
+      link: '/instructor/create',
+      icon: <MdOutlineCreate size={25} />
     },
     {
       name: 'manage questions',

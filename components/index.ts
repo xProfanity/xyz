@@ -11,5 +11,6 @@ import UserProfileFooter from "./UserProfileFooter";
 import HamburgerMenu from "./HamburgerMenu";
 import Sidebar from "./Sidebar";
 import DataSection from "./DataSection";
+import GoBackButton from "./GoBackButton";
 
-export { Button, DataSection, Sidebar, Filters, HamburgerMenu, Header, Input, NavLink, SearchInput, SidebarLink, Stage, StudentName, UserProfileFooter };
+export { Button, DataSection, GoBackButton, Sidebar, Filters, HamburgerMenu, Header, Input, NavLink, SearchInput, SidebarLink, Stage, StudentName, UserProfileFooter };
