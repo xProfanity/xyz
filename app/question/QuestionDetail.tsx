@@ -31,7 +31,7 @@ export default function QuestionDetail({question}: Props) {
         }
         {
             role?.toLowerCase() === "student" && (
-                <AnswerFields />
+                <AnswerFields question={question} />
             )
         }
     </div>

@@ -16,6 +16,8 @@ export default function AnswerCards({submissions, questionId}: {submissions: str
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
 
+    console.log('submissions, answers', submissions, answers)
+
     const handleGradingAnswer = async (answerId: string) => {
 
         if(Number.isNaN(parseInt(grade))) {
@@ -75,16 +77,16 @@ export default function AnswerCards({submissions, questionId}: {submissions: str
                     </div>
 
                     <div className='mt-4'>
-                        <Input
-                            type='text'
-                            onChangeFn={({target})=> setComment(target.value)}
+                        <textarea
+                            onChange={({target})=> setComment(target.value)}
                             value={comment}
-                            classes='rounded-lg w-full'
-                            placeholder='Comment'
-                        />
+                            className='rounded-lg w-full border border-black outline-primary p-2'
+                            placeholder='Place your comment for the answer here'
+                            rows={3}
+                        ></textarea>
                     </div>
 
-                    <Button handleOnClick={() => handleGradingAnswer(answer._id as string)} primary classes="rounded-lg mt-10" disabled={loading} loading={loading}>
+                    <Button handleOnClick={() => handleGradingAnswer(answer._id as string)} primary classes="rounded-lg mt-10 w-full md:w-fit" disabled={loading} loading={loading}>
                         Submit
                     </Button>
 

@@ -238,7 +238,7 @@ const Quizzes = ({educationType, userId, profileId}: SubjectsProps) => {
                   className="border-b border-black cursor-pointer outline-0 hidden md:block"
                 >
                   <Link
-                    href={""}
+                    href={`/question/${quiz._id}`}
                   >
                     <CgMaximize size={30} color="gray" />
                   </Link>

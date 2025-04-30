@@ -41,7 +41,7 @@ export async function fetchAnswers(id: string | undefined) {
 }
 
 export async function fetchAnswersByQuestion(questionId: string) {
-    const query = `*[_type == "answer" && !grade && question -> _id == "${questionId}"]`
+    const query = `*[_type == "answer" && grade == null && question -> _id == "${questionId}"]`
 
     const result = await client.fetch(query)
 
@@ -87,3 +87,22 @@ export async function gradeAnswer(answerId: string, comment: string, grade: numb
         .set({comment, grade})
         .commit()
 }
+
+// export async function clientSubmitAnswer(questionId: string , answer: string, studentId: string, profileId: string) {
+//     const doc = {
+//         _type: 'answer',
+//         answer,
+//         question: {
+//             _ref: questionId,
+//             _type: 'question'
+//         },
+//         studentId,
+//         profileId
+//     }
+    
+//     await client.create(doc)
+
+//     await client
+//         .patch(questionId)
+//         .setIfMissing({sub})
+// }
