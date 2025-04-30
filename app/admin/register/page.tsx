@@ -4,6 +4,7 @@ import { Button, Input } from '@/components'
 import useFetch from '@/hooks/useFetch'
 import { p } from 'framer-motion/client'
 import React, { useState } from 'react'
+import { toast } from 'sonner'
 
 export default function Register() {
     const [email, setEmail] = useState("")
@@ -29,7 +30,10 @@ export default function Register() {
             )
 
             setError("")
-            setSuccess(`Successfully registered ${email} with password ${password}`)
+            // setSuccess(`Successfully registered ${email} with password ${password}`)
+            toast.success(`Successfully registered ${email} with password ${password}`)
+            setEmail("")
+            setPassword("")
         } catch (error) {
             console.log('error', error)
             setSuccess("")
