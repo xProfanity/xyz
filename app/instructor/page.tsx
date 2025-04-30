@@ -5,6 +5,7 @@ import useFetch from '@/hooks/useFetch'
 import { fetchAnswers, fetchQuestions } from '@/services/sanity'
 import { useUser } from '@/store'
 import { Answer, Question, StudentProfile } from '@/types'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { BsFilter } from 'react-icons/bs'
 import Skeleton from 'react-loading-skeleton'
@@ -17,6 +18,7 @@ export default function Tutor() {
   const {userId, name, email} = useUser((state) => state)
   const {fetchRequest} = useFetch()
   
+  const router = useRouter()
 
   useEffect(() => {
     const getQuestions = async () => {
@@ -42,7 +44,7 @@ export default function Tutor() {
           <p className='text-gray-400'>form, submit questions, and grade answers on this platform</p>
         </div>
 
-        <Button handleOnClick={()=>{}} primary classes="rounded-lg hidden md:block">
+        <Button handleOnClick={()=> router.push("/instructor/create")} primary classes="rounded-lg hidden md:block">
           form questions
         </Button>
       </div> 
@@ -66,11 +68,7 @@ export default function Tutor() {
           ) : (
             <>
               {!!questions?.length ? (
-                <DataSection
-                  header="your questions"
-                  data={questions as any[]}
-                  description='quick manage the questions you submitted to your students'
-                />
+                <DataSection data={questions as any[]} />
               ) : (
                 <p className='text-gray-400'>Create questions and find them here</p>
               )}

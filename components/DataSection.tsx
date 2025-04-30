@@ -8,22 +8,15 @@ import React from 'react'
 type SanityData = Partial<Answer>
 
 interface Props {
-    header: string
-    description: string
     data: SanityData[]
 }
 
-export default function DataSection({header, description, data}: Props) {
+export default function DataSection({data}: Props) {
   
     const router = useRouter()
 
     return (
     <div>
-        <div>
-            <h1 className='poppins-bold text-lg'>{header}</h1>
-            <p className='text-gray-400 '>{description}</p>
-        </div>
-
         <div className='flex flex-row flex-wrap gap-4 mt-4'>
             {data?.map((data, index) => (
                 <div key={index} onClick={() => router.push(`/question/${data._id}`)} className='p-2 bg-white hover:bg-primary/35 cursor-pointer rounded-lg shadow shadow-primary/60 max-w-[450px]'>
