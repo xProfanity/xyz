@@ -112,7 +112,19 @@ export async function createQuestion(
 }
 
 export async function fetchResources(author: string) {
-    const query = `*[_type == "resource" && document.author == "${author}"]`
+    const query = `*[_type == "resource" && document.author == "${author}"]{
+        ...,
+        "resourceUrl": document.asset -> url,
+        "resourceName": document.asset -> originalFilename
+    }`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
+export async function fetchAllResources(id?: string | null) {
+    const query = id ? `*[_type == "resource" && _id == "${id}"]` : `*[_type == "resource"]`
 
     const result = await client.fetch(query)
 

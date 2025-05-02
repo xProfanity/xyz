@@ -22,6 +22,7 @@ export default function Resources() {
                 const response = await fetchResources(userId?.toString() as string)
 
                 setResources(response)
+                console.log('response', response)
             } catch (error) {
                 console.log('error', error)
             } finally {
