@@ -1,8 +1,19 @@
+import { SanityAssetDocument } from "@sanity/client"
+
 export interface SanityObject {
   _id: string
   _type: string
   _createdAt: string | number | Date
   _updatedAt: string | number | Date
+}
+
+export type Resource = Partial<SanityObject> & {
+  title: string
+  document: Partial<SanityAssetDocument> & {
+    description: string
+    author: string
+    notes: string
+  }
 }
 
 export type Question = Partial<SanityObject> & {

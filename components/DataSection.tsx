@@ -19,7 +19,7 @@ export default function DataSection({data}: Props) {
     <div>
         <div className='flex flex-row flex-wrap gap-4 mt-4'>
             {data?.map((data, index) => (
-                <div key={index} onClick={() => router.push(`/question/${data._id}`)} className='p-2 bg-white hover:bg-primary/35 cursor-pointer rounded-lg shadow shadow-primary/60 max-w-[450px]'>
+                <div key={index} onClick={() => router.push(`/${data._type}/${data._id}`)} className='p-2 bg-white hover:bg-primary/35 cursor-pointer rounded-lg shadow shadow-primary/60 max-w-[450px]'>
                     {data._type === "question" && (
                         <div className='min-h-[180px] flex flex-col justify-between'>
                             <div className='flex flex-col sm:flex-row sm:justify-between'>
@@ -31,6 +31,11 @@ export default function DataSection({data}: Props) {
                             <div className='flex flex-row justify-between text-gray-400'>
                                 <h1 className=''>{data.submissions?.length || 0} answer{data.submissions?.length !== 1 && 's'}</h1>
                             </div>
+                        </div>
+                    )}
+                    {data._type === "resource" && (
+                        <div className='min-h-[180px] flex flex-col justify-between'>
+                            resource
                         </div>
                     )}
                 </div>

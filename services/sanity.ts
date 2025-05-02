@@ -110,3 +110,29 @@ export async function createQuestion(
 
     await client.create(doc)
 }
+
+export async function fetchResources(author: string) {
+    const query = `*[_type == "resource" && document.author == "${author}"]`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
+export async function submitResource(title: string, notes: string, description: string, file: string, userId: string) {
+    const doc = {
+        _type: 'resource',
+        title,
+        document: {
+            notes,
+            description,
+            asset: {
+                _type: 'reference',
+                _ref: file
+            },
+            author: userId
+        }
+    }
+
+    await client.create(doc)
+}

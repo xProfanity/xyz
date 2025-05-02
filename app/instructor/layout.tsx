@@ -3,18 +3,23 @@ import Image from 'next/image'
 import React from 'react'
 import { BiHome, BiReply } from 'react-icons/bi'
 import { CgMenuLeft, CgMenuLeftAlt, CgMenuRight } from 'react-icons/cg'
-import { MdManageAccounts, MdOutlineCreate, MdOutlineSubject, MdQuestionAnswer } from 'react-icons/md'
+import { MdAddBusiness, MdEmojiObjects, MdManageAccounts, MdOutlineCreate, MdOutlineSubject, MdQuestionAnswer } from 'react-icons/md'
 import { RiProgress7Line } from 'react-icons/ri'
 import { SlSettings } from 'react-icons/sl'
 import { TbCategory } from 'react-icons/tb'
 import InstructorHeader from './InstructorHeader'
 import InstructorSidebar from '@/components/InstructorSidebar'
 import { PiNotePencil } from 'react-icons/pi'
-import { FcAnswers } from 'react-icons/fc'
+import { FcAnswers, FcDocument } from 'react-icons/fc'
 import { SiAnswer } from 'react-icons/si'
-import { DiResponsive } from 'react-icons/di'
+import { DiMaterializecss, DiResponsive } from 'react-icons/di'
 import { VscReply } from 'react-icons/vsc'
-import { IoCreate, IoCreateOutline } from 'react-icons/io5'
+import { IoCreate, IoCreateOutline, IoDocumentAttachSharp } from 'react-icons/io5'
+import { BsTools } from 'react-icons/bs'
+import { GoTools } from 'react-icons/go'
+import { GiExplosiveMaterials } from 'react-icons/gi'
+import { GrDocumentNotes, GrResources } from 'react-icons/gr'
+import { FaRegAddressBook } from 'react-icons/fa'
 
 export default function AdminLayout({children}: {children: React.ReactNode}) {
   const notifications = null
@@ -30,14 +35,14 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
       icon: <MdOutlineCreate size={25} />
     },
     {
-      name: 'manage questions',
-      link: '/instructor/questions',
-      icon: <PiNotePencil size={25} />,
+      name: 'resources',
+      link: '/instructor/resources',
+      icon: <IoDocumentAttachSharp size={25} />,
     },
     {
-      name: 'answers submitted',
-      link: '/instructor/answers',
-      icon: <VscReply size={25} />,
+      name: 'add resources',
+      link: '/instructor/resource',
+      icon: <GrResources size={25} />,
     },
   ]
   return (
