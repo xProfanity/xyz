@@ -11,9 +11,6 @@ import { Filters, HamburgerMenu, Header, NavLink, Sidebar, StudentName } from "@
 import "../globals.css";
 import { CiSettings } from "react-icons/ci";
 import { GrSchedule } from "react-icons/gr";
-import { FcWorkflow } from "react-icons/fc";
-import { BsQuestionOctagon } from "react-icons/bs";
-import { BiNote } from "react-icons/bi";
 import { LuNotebookPen } from "react-icons/lu";
 
 export const metadata: Metadata = {
@@ -29,7 +26,7 @@ export default function RootLayout({
   const studentNavLinks = [
     {
       name: 'questions',
-      link: '/student/questions',
+      link: '/student',
       icon: <LuNotebookPen size={20} />,
     },
     {
@@ -90,9 +87,9 @@ export default function RootLayout({
               <Header />
               <Filters />
             </div>
-            <main className="md:pb-0 pb-24">{children}</main>
+            <main className="md:pb-0 pb-24 h-[40rem] sm:h-auto">{children}</main>
 
-            <section className="block md:hidden fixed bottom-0 left-0 w-full bg-[#FFFFFF] rounded-t-xl">
+            <section className="block md:hidden fixed bottom-0 left-0 w-full bg-[#F0EFF4] rounded-t-xl">
               <ul className="flex flex-row justify-around items-center py-6">
                 {studentNavLinks.map((link, index) => (
                   <NavLink name={link.name} link={link.link} icon={link.icon} index={index} key={index}/>
