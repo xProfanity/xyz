@@ -148,3 +148,22 @@ export async function submitResource(title: string, notes: string, description: 
 
     await client.create(doc)
 }
+
+export async function submitLecture(content: any[], title: string, instructorId: string) {
+    const doc = {
+        _type: 'lecture',
+        title,
+        content,
+        instructorId
+    }
+
+    await client.create(doc)
+}
+
+export async function fetchLectures() {
+    const query = `*[_type == "lecture"]`
+
+    const result = await client.fetch(query)
+
+    return result
+}

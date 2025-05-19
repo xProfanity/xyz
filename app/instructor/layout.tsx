@@ -3,13 +3,13 @@ import Image from 'next/image'
 import React from 'react'
 import { BiHome, BiReply } from 'react-icons/bi'
 import { CgMenuLeft, CgMenuLeftAlt, CgMenuRight } from 'react-icons/cg'
-import { MdAddBusiness, MdEmojiObjects, MdManageAccounts, MdOutlineCreate, MdOutlineSubject, MdQuestionAnswer } from 'react-icons/md'
+import { MdAddBusiness, MdEmojiObjects, MdManageAccounts, MdOutlineCreate, MdOutlineSubject, MdPlayLesson, MdQuestionAnswer } from 'react-icons/md'
 import { RiProgress7Line } from 'react-icons/ri'
 import { SlSettings } from 'react-icons/sl'
 import { TbCategory } from 'react-icons/tb'
 import InstructorHeader from './InstructorHeader'
 import InstructorSidebar from '@/components/InstructorSidebar'
-import { PiNotePencil } from 'react-icons/pi'
+import { PiNotePencil, PiPresentation } from 'react-icons/pi'
 import { FcAnswers, FcDocument } from 'react-icons/fc'
 import { SiAnswer } from 'react-icons/si'
 import { DiMaterializecss, DiResponsive } from 'react-icons/di'
@@ -17,9 +17,9 @@ import { VscReply } from 'react-icons/vsc'
 import { IoCreate, IoCreateOutline, IoDocumentAttachSharp } from 'react-icons/io5'
 import { BsTools } from 'react-icons/bs'
 import { GoTools } from 'react-icons/go'
-import { GiExplosiveMaterials } from 'react-icons/gi'
+import { GiExplosiveMaterials, GiTeacher } from 'react-icons/gi'
 import { GrDocumentNotes, GrResources } from 'react-icons/gr'
-import { FaRegAddressBook } from 'react-icons/fa'
+import { FaChalkboardTeacher, FaRegAddressBook } from 'react-icons/fa'
 
 export default function AdminLayout({children}: {children: React.ReactNode}) {
   const notifications = null
@@ -33,6 +33,11 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
       name: 'create question',
       link: '/instructor/create',
       icon: <MdOutlineCreate size={25} />
+    },
+    {
+      name: 'create lecture',
+      link: '/instructor/lecture',
+      icon: <FaChalkboardTeacher size={25} />
     },
     {
       name: 'resources',
@@ -66,7 +71,7 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
                 <ul className='w-full flex flex-col gap-2'>
                   {navLinks.map((link, index) => (
                     <SidebarLink key={index} link={link.link}>
-                        <NavLink icon={link.icon} index={index} link={link.link} name={link.name} />
+                        <NavLink icon={link.icon} index={index} link={link.link} name={link.name} sidebar />
                         {notifications && (
                           <span
                             className='h-10 w-10 rounded-full bg-orange-400 flex flex-col justify-center items-center text-white'>
@@ -86,7 +91,7 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
         <section className='min-h-screen w-full md:w-4/5 flex flex-col p-2 md:absolute md:left-1/5'>
           <InstructorHeader />
 
-          <main className=''>
+          <main className='w-full'>
               {children}
           </main>
         </section>

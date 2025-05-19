@@ -93,7 +93,7 @@ export default function Signin() {
         } catch (rejection) {
             console.log('error signing in', rejection)
             setPassword("")
-            setError(rejection as string)
+            setError("error signing in")
         } finally {
             setIsLoading(false)
         }
@@ -149,7 +149,7 @@ export default function Signin() {
             console.log('error', error)
             setConfirmPassword("")
             setPassword("")
-            setError(error as string)
+            setError("error signing in")
         } finally {
             setIsLoading(false)
         }

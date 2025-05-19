@@ -1,13 +1,11 @@
 "use client"
 
 import { Button, DataSection } from '@/components'
-import useFetch from '@/hooks/useFetch'
-import { fetchAnswers, fetchQuestions } from '@/services/sanity'
+import { fetchQuestions } from '@/services/sanity'
 import { useUser } from '@/store'
-import { Answer, Question, StudentProfile } from '@/types'
+import { Question } from '@/types'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { BsFilter } from 'react-icons/bs'
 import Skeleton from 'react-loading-skeleton'
 
 export default function Tutor() {
@@ -15,9 +13,7 @@ export default function Tutor() {
   const [loading, setIsLoading] = useState(true)
   
 
-  const {userId, name, email} = useUser((state) => state)
-  const {fetchRequest} = useFetch()
-  
+  const {userId, name} = useUser((state) => state)
   const router = useRouter()
 
   useEffect(() => {

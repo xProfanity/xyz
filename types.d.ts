@@ -7,6 +7,14 @@ export interface SanityObject {
   _updatedAt: string | number | Date
 }
 
+export type Lecture = Partial<SanityObject> & {
+  title: string
+  subtext: string
+  content: string
+  instructorId: string
+  educationType: string
+}
+
 export type Resource = Partial<SanityObject> & {
   title: string
   document: Partial<SanityAssetDocument> & {

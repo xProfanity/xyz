@@ -21,7 +21,12 @@ interface Sidebar {
     openSidebar: () => void
     closeSidebar: () => void
 }
-  
+ 
+interface Tabs {
+    active: "all" | "lectures" | "quizzes" | "books"
+    switchTab: (tab: "all" | "lectures" | "quizzes" | "books") => void
+}
+
 export const useUser = create<UserState>()(
     persist(
         (set) => ({
@@ -45,4 +50,9 @@ export const useInstructorSidebar = create<Sidebar>((set) => ({
     isOpen: false,
     openSidebar: () => set(() => ({isOpen: true})),
     closeSidebar: () => set(() => ({isOpen: false}))
+}))
+
+export const useTabs = create<Tabs>((set) => ({
+    active: 'all',
+    switchTab: (tab) => set(() => ({active: tab}))
 }))
