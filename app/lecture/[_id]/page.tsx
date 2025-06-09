@@ -1,6 +1,5 @@
 import { fetchLectureById, fetchLectures } from '@/services/sanity'
 import { Lecture } from '@/types'
-import { p } from 'framer-motion/client'
 import React from 'react'
 import LectureDetails from '../Lecture'
 
