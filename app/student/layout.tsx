@@ -82,7 +82,7 @@ export default function RootLayout({
               </div>
             </div>
           </div>
-          <div className="bg-[#FCF9FE] rounded-3xl w-full p-2 md:p-8 mt-0 md:mt-10">
+          <div className="rounded-3xl w-full p-2 md:p-8 mt-0 md:mt-10">
             <div className="hidden  md:flex flex-col md:flex-row justify-start md:justify-between md:items-center">
               <Header />
               <Filters />

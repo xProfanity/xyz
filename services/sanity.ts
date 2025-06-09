@@ -149,12 +149,17 @@ export async function submitResource(title: string, notes: string, description: 
     await client.create(doc)
 }
 
-export async function submitLecture(content: any[], title: string, instructorId: string) {
+export async function submitLecture(content: any[], title: string, instructorId: string, educationType: string, subject: string, course: string, level: string, form: string) {
     const doc = {
         _type: 'lecture',
         title,
         content,
-        instructorId
+        instructorId,
+        educationType, 
+        subject,
+        course,
+        level,
+        form
     }
 
     await client.create(doc)
@@ -162,6 +167,35 @@ export async function submitLecture(content: any[], title: string, instructorId:
 
 export async function fetchLectures() {
     const query = `*[_type == "lecture"]`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
+export async function fetchLecturesByEducationType(educationType: string) {
+    const query = `*[_type == "lecture" && educationType == "${educationType}"]`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
+export async function fetchLectureById(id: string) {
+    const query = `*[_type == "lecture" && _id == "${id}"][0]{
+        ...,
+        "files": content[_type == "image" || _type == "file"] {
+            "fileName": asset -> originalFilename,
+            "fileUrl": asset -> url
+        },
+        content[] {
+            ...,
+            _type == "file" || _type == "image" => {
+                "filename": asset -> originalFilename,
+                "fileUrl": asset -> url
+            }
+        }
+    }`
 
     const result = await client.fetch(query)
 

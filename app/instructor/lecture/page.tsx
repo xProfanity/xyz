@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from '@/components'
+import useSchool from '@/hooks/useSchool'
 import { submitLecture } from '@/services/sanity'
 import { useUser } from '@/store'
 import { fileType } from '@/utils'
@@ -8,7 +9,7 @@ import { client } from '@/utils/sanity'
 import { File } from 'buffer'
 import Image from 'next/image'
 import React, { useState } from 'react'
-import { BiAddToQueue, BiPaperPlane, BiPlus, BiUpload } from 'react-icons/bi'
+import { BiAddToQueue, BiHeading, BiPaperPlane, BiPlus, BiUpload } from 'react-icons/bi'
 import { CgAttachment } from 'react-icons/cg'
 import { FiFileText } from 'react-icons/fi'
 import { MdUpdate } from 'react-icons/md'
@@ -31,6 +32,16 @@ export default function Lecture() {
   const [uploadingFile, setUploadingFile] = useState(false)
   const [updating, setUpdating] = useState<{state: boolean; paragraph: number | null}>({state: false, paragraph: null})
   const [submittingLecture, setSubmittingLecture] = useState(false)
+  const [headerActive, setHeaderActive] = useState(false)
+
+  const [educationType, setEducationType] = useState("")
+  const [subject, setSubject] = useState("")
+  const [course, setCourse] = useState("")
+  const [form, setForm] = useState("")
+  const [level, setLevel] = useState("")
+
+  const {getSubjects, levels, forms} = useSchool()
+  
 
   const [loading, setLoading] = useState(false)
 
@@ -38,8 +49,9 @@ export default function Lecture() {
 
   const addParagraph = () => {
     if(blockText[blockText.length-1]) {
-      setBlockText([...blockText, {type: 'block', content: textarea}])
+      setBlockText([...blockText, {type: headerActive ? 'h1' :'block', content: textarea}])
       setTextArea("")
+      setHeaderActive(false)
     }
   }
   const updateParagraph = () => {
@@ -54,6 +66,7 @@ export default function Lecture() {
 
     setTextArea("")
     setUpdating({state: false, paragraph: null})
+    setHeaderActive(false)
   }
 
   const handleEditParagraph = (content: string, index:number) => {
@@ -75,9 +88,9 @@ export default function Lecture() {
 
   const handleSumbitLecture = async () => {
     const sanityBlockText = blockText.filter((block) => block.content !== '').map(({content, type}, index) => ({
-      _type: type,
-      style: type === 'block' ? 'normal' : null,
-      children: type === 'block' ? [
+      _type: type === 'h1' ? 'block' : type,
+      style: type === 'block' ? 'normal' : type === 'h1' ? 'h1' : null,
+      children: type === 'block' || type === 'h1' ? [
         {
           _type: 'span',
           text: content,
@@ -96,7 +109,8 @@ export default function Lecture() {
 
     try {
       setLoading(true)
-      await submitLecture([...sanityBlockText], title, userId?.toString() as string)
+      await submitLecture([...sanityBlockText], title, userId?.toString() as string, educationType, subject, course, level, form)
+      setBlockText([{ type: 'block', content: '' }])
       toast.success("Lecture submitted successfully")
     } catch (error) {
       console.log('error', error)
@@ -105,6 +119,8 @@ export default function Lecture() {
       setLoading(false)
     }
   }
+
+  const toggleHeader = () => setHeaderActive(!headerActive)
 
   const handleFileSelect = () => {
           const input = document.createElement("input")
@@ -119,7 +135,7 @@ export default function Lecture() {
                       if(!allowedTypes.includes(file.type)) return toast.error("File type not allowed")
                       setUploadingFile(true)
                       console.log('file', file)
-                      const fileAsset = await client.assets.upload("file", file, {contentType: file.type, filename: file.name, preserveFilename: true})
+                      const fileAsset = await client.assets.upload(file.type.includes("image") ? "image" : "file", file, {contentType: file.type, filename: file.name, preserveFilename: true})
 
                       const urlObject = URL.createObjectURL(file)
                       setBlockText([...blockText, {type: fileType(file.type), content: fileAsset._id, urlObject, filename: file.name}])
@@ -147,9 +163,14 @@ export default function Lecture() {
           className='w-full rounded-lg outline-none placeholder:text-xl'
           rows={2}
         />
+        <div className='h-10 w-full flex flex-row justify-between'>
+          <button onClick={toggleHeader} className={`h-10 w-10 border rounded flex flex-col items-center justify-center text-center ${headerActive && 'bg-primary/50'}`}>
+            <BiHeading color='gray'/>
+          </button>
+        </div>
         <textarea
           className='border w-full rounded-lg p-4'
-          placeholder='add a paragraph here...'
+          placeholder={headerActive ? 'add a heading here...' : 'add a paragraph here...'}
           rows={3}
           value={textarea}
           onChange={({target}) => setTextArea(target.value)}
@@ -175,6 +196,85 @@ export default function Lecture() {
           )}
         </div>
 
+        <div className='my-2 w-full'>
+          <div className='w-full'>
+              <label htmlFor="">Education Type</label>
+          </div>
+          <select onChange={({target}) => setEducationType(target.value)} name="" id="" className='border rounded-lg outline-primary p-2 px-6 w-full'>
+              <option value=""></option>
+              <option value="secondary">Secondary</option>
+              <option value="professional">Professional</option>
+          </select>
+
+          {educationType === "secondary" && (
+              <>
+                  <div className='w-full'>
+                      <label htmlFor="">Subject</label>
+                  </div>
+                  <select onChange={({target}) => {
+                      setSubject(target.value)
+                      setCourse("")
+                  }} name="" id="" className='border rounded-lg outline-primary p-2 px-6 w-full'>
+                      <option value=""></option>
+                      {getSubjects(educationType)?.map(({subject}, index) => (
+                          <option key={index} value={subject.toLowerCase()} className='capitalize'>{subject}</option>
+                      ))}
+                  </select>
+              </>
+          )}
+
+          {educationType === "professional" && (
+              <>
+              <div className='w-full'>
+                  <label htmlFor="">Course</label>
+              </div>
+              <select onChange={({target}) => {
+                  setCourse(target.value)
+                  setSubject("")
+              }} name="" id="" className='border rounded-lg outline-primary p-2 px-6 w-full'>
+                  <option value=""></option>
+                  {getSubjects(educationType)?.map(({subject}, index) => (
+                      <option key={index} value={subject.toLowerCase()} className='capitalize'>{subject}</option>
+                  ))}
+              </select>
+              </>
+          )}
+
+          {educationType === "secondary" && (
+              <>
+              <div className='w-full'>
+                  <label htmlFor="">Form</label>
+              </div>
+              <select onChange={({target}) => {
+                  setForm(target.value)
+                  setLevel("")
+              }} name="" id="" className='border rounded-lg outline-primary p-2 px-6 w-full'>
+                  <option value=""></option>
+                  {forms.map((form, index) => (
+                      <option key={index} value={form} className='capitalize'>{form}</option>
+                  ))}
+              </select>
+              </>
+          )}
+
+          {educationType === "professional" && (
+              <>
+              <div className='w-full'>
+                  <label htmlFor="">Level</label>
+              </div>
+              <select onChange={({target}) => {
+                  setLevel(target.value)
+                  setForm("")
+              }} name="" id="" className='border rounded-lg outline-primary p-2 px-6 w-full'>
+                  <option value=""></option>
+                  {levels.map(({value, title}, index) => (
+                      <option key={index} value={value} className='capitalize'>{title}</option>
+                  ))}
+              </select>
+              </>
+          )}
+        </div>
+
         <div>
           <Button
             handleOnClick={handleSumbitLecture}
@@ -182,13 +282,13 @@ export default function Lecture() {
             classes={"rounded-lg"}
             fullWidth
             loading={loading}
-            disabled={loading || title === ""}
+            disabled={loading || title === "" || (course === "" && subject === "") || (form === "" && level === "") || educationType === ""}
           >
             Submit Lecture
           </Button>
         </div>
       </div>
-      <div className='col-span-3 hidden md:flex flex-col gap-4'>
+      <div className='col-span-3 hidden md:flex flex-col gap-4 h-[calc(100vh-1rem)] relative overflow-y-scroll'>
         <div className=''>
           <h1 className='font-bold text-3xl text-center first-letter:uppercase'>{title ? title : 'add a title'}</h1>
         </div>
@@ -208,10 +308,22 @@ export default function Lecture() {
                 <Image
                   src={urlObject!}
                   alt='uploaded file'
+                  key={index}
                   fill
                   className='object-cover h-auto w-auto rounded-lg'
                 />
               </div>
+            ) : type === "h1" ? (
+              <h1
+                key={index}
+                className='cursor-pointer hover:outline-2 rounded-lg p-2 font-bold text-xl'
+                onClick={() => {
+                  setHeaderActive(true)
+                  return handleEditParagraph(content as string, index)
+                }}
+              >
+                {content as string}
+              </h1>
             ) : (
               <div className='h-[200px] w-full rounded-lg relative bg-gray-200'>
                 <div className='h-full w-full flex flex-col justify-center items-center'>

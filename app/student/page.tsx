@@ -6,10 +6,12 @@ import { WorkField } from "./workfield";
 import { Schedules } from "./schedule";
 import { div } from "framer-motion/client";
 import { useEffect, useState } from "react";
-import { fetchLectures } from "@/services/sanity";
+import { fetchLectures, fetchLecturesByEducationType } from "@/services/sanity";
 import { toast } from "sonner";
 import { Lecture } from "@/types";
 import Skeleton from "react-loading-skeleton";
+import Link from "next/link";
+import dayjs from "dayjs";
 
 export default function Home() {
   
@@ -53,13 +55,15 @@ const TabsLectures = () => {
 
   const [fetching, setFetching] = useState(false)
 
+  const {studentType: educationType} = useUser()
+
   console.log('lectures', lectures)
 
   useEffect(() => {
     const handleFetchLectures = async () => {
       try {
         setFetching(true)
-        const response = await fetchLectures()
+        const response = await fetchLecturesByEducationType(educationType as string)
         setLectures(response)
       } catch (error) {
         console.log('error', error)
@@ -77,9 +81,15 @@ const TabsLectures = () => {
   return (
     <div className="flex flex-row flex-wrap gap-4 w-full mt-4">
         {lectures?.map((lecture, index) => (
-          <div className="w-[300px] rounded-lg bg-gray-300 flex flex-col p-4">
+          <Link href={`/lecture/${lecture._id}`} key={index} className="w-[300px] rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col p-4">
             <h1>{lecture.title}</h1>
-          </div>
+
+            <div className="mt-2">
+              <p className="font-bold text-lg">{lecture.subject || lecture.course}</p>
+            </div>
+
+            <p className="mt-2 text-gray-400">{dayjs(lecture._createdAt).format("DD MMMM, YYYY")}</p>
+          </Link>
         ))}
         {fetching && (
           [...Array(4)].map((_, index) => (
