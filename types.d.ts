@@ -27,6 +27,12 @@ interface Content {
   fileUrl?: string
 }
 
+interface Participation {
+  name: string
+  content: string
+  _key: string
+}
+
 export type Lecture = Partial<SanityObject> & {
   title: string
   subtext: string
@@ -38,6 +44,7 @@ export type Lecture = Partial<SanityObject> & {
   form?: string
   subject?: string
   course?: string
+  participations?: Participation[]
 }
 
 export type Resource = Partial<SanityObject> & {

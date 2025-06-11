@@ -2,7 +2,7 @@
 
 import { Button } from '@/components'
 import useSchool from '@/hooks/useSchool'
-import { submitLecture } from '@/services/sanity'
+import { createQuestion, submitLecture } from '@/services/sanity'
 import { useUser } from '@/store'
 import { fileType } from '@/utils'
 import { client } from '@/utils/sanity'
@@ -10,12 +10,15 @@ import { File } from 'buffer'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { BiAddToQueue, BiHeading, BiPaperPlane, BiPlus, BiUpload } from 'react-icons/bi'
+import { BsQuestionLg } from 'react-icons/bs'
 import { CgAttachment } from 'react-icons/cg'
 import { FiFileText } from 'react-icons/fi'
+import { LuHeading1, LuHeading2 } from 'react-icons/lu'
 import { MdUpdate } from 'react-icons/md'
 import { TbTrash } from 'react-icons/tb'
 import Skeleton from 'react-loading-skeleton'
 import { toast } from 'sonner'
+import { v4 as uuidv4 } from 'uuid'
 
 interface BlockText {
   type: string
@@ -31,8 +34,8 @@ export default function Lecture() {
   const [blockText, setBlockText] = useState<BlockText[]>([{ type: 'block', content: '' }])
   const [uploadingFile, setUploadingFile] = useState(false)
   const [updating, setUpdating] = useState<{state: boolean; paragraph: number | null}>({state: false, paragraph: null})
-  const [submittingLecture, setSubmittingLecture] = useState(false)
-  const [headerActive, setHeaderActive] = useState(false)
+  const [headerActive, setHeaderActive] = useState({type: '', active: false})
+  const [question, setQuestion] = useState(false)
 
   const [educationType, setEducationType] = useState("")
   const [subject, setSubject] = useState("")
@@ -49,9 +52,10 @@ export default function Lecture() {
 
   const addParagraph = () => {
     if(blockText[blockText.length-1]) {
-      setBlockText([...blockText, {type: headerActive ? 'h1' :'block', content: textarea}])
+      setBlockText([...blockText, {type: question ? 'blockquote' : headerActive.active ? headerActive.type : 'block', content: textarea}])
       setTextArea("")
-      setHeaderActive(false)
+      setHeaderActive({type: '', active: false})
+      setQuestion(false)
     }
   }
   const updateParagraph = () => {
@@ -66,7 +70,7 @@ export default function Lecture() {
 
     setTextArea("")
     setUpdating({state: false, paragraph: null})
-    setHeaderActive(false)
+    setHeaderActive({type: '', active: false})
   }
 
   const handleEditParagraph = (content: string, index:number) => {
@@ -88,9 +92,9 @@ export default function Lecture() {
 
   const handleSumbitLecture = async () => {
     const sanityBlockText = blockText.filter((block) => block.content !== '').map(({content, type}, index) => ({
-      _type: type === 'h1' ? 'block' : type,
-      style: type === 'block' ? 'normal' : type === 'h1' ? 'h1' : null,
-      children: type === 'block' || type === 'h1' ? [
+      _type: type === 'h1' || type === "h2" || type === "blockquote" ? 'block' : type,
+      style: type === 'block' ? 'normal' : type === 'h1' || type === "h2" || type === "blockquote" ? type : null,
+      children: type === 'block' || type === 'h1' || type === "h2" || type === "blockquote" ? [
         {
           _type: 'span',
           text: content,
@@ -100,16 +104,24 @@ export default function Lecture() {
       asset: type === 'image' || type === "file" ? {
         _type: 'reference',
         _ref: content,
-        _key: Math.floor(Math.random()*900012032497671236+1).toString()
+        _key: uuidv4()
       } : null,
-      _key: Math.floor(Math.random()*530012032497671236+1).toString()
+      _key: uuidv4()
     }))
 
     console.log('sanityBlockText', sanityBlockText)
 
     try {
       setLoading(true)
+      blockText.filter((block) => block.type === "blockquote").forEach(async (block, index) => await createQuestion(block.content as string, educationType, subject, course, form, level, userId?.toString() as string))
       await submitLecture([...sanityBlockText], title, userId?.toString() as string, educationType, subject, course, level, form)
+      setBlockText([{ type: 'block', content: '' }])
+      setEducationType("")
+      setSubject("")
+      setCourse("")
+      setForm("")
+      setLevel("")
+      setTitle("")
       setBlockText([{ type: 'block', content: '' }])
       toast.success("Lecture submitted successfully")
     } catch (error) {
@@ -120,8 +132,11 @@ export default function Lecture() {
     }
   }
 
-  const toggleHeader = () => setHeaderActive(!headerActive)
+  const toggleHeader1 = () => setHeaderActive({type: 'h1', active: !headerActive.active})
+  const toggleHeader2 = () => setHeaderActive({type: 'h2', active: !headerActive.active})
+  const toggleQuestion = () => setQuestion(!question)
 
+  
   const handleFileSelect = () => {
           const input = document.createElement("input")
           input.type = 'file'
@@ -163,14 +178,20 @@ export default function Lecture() {
           className='w-full rounded-lg outline-none placeholder:text-xl'
           rows={2}
         />
-        <div className='h-10 w-full flex flex-row justify-between'>
-          <button onClick={toggleHeader} className={`h-10 w-10 border rounded flex flex-col items-center justify-center text-center ${headerActive && 'bg-primary/50'}`}>
-            <BiHeading color='gray'/>
+        <div className='h-10 w-full flex flex-row justify-start items-center gap-2'>
+          <button onClick={toggleHeader1} className={`h-10 w-10 border rounded flex flex-col items-center justify-center text-center ${headerActive.type === "h1" && headerActive.active && 'bg-primary/50'}`}>
+            <LuHeading1 color='gray'/>
+          </button>
+          <button onClick={toggleHeader2} className={`h-10 w-10 border rounded flex flex-col items-center justify-center text-center ${headerActive.type === "h2" && headerActive.active && 'bg-primary/50'}`}>
+            <LuHeading2 color='gray'/>
+          </button>
+          <button onClick={toggleQuestion} className={`h-10 w-10 border rounded flex flex-col items-center justify-center text-center ${question && 'bg-primary/50'}`}>
+            <BsQuestionLg color='gray'/>
           </button>
         </div>
         <textarea
           className='border w-full rounded-lg p-4'
-          placeholder={headerActive ? 'add a heading here...' : 'add a paragraph here...'}
+          placeholder={headerActive.active ? 'add a heading here...' : 'add a paragraph here...'}
           rows={3}
           value={textarea}
           onChange={({target}) => setTextArea(target.value)}
@@ -293,7 +314,7 @@ export default function Lecture() {
           <h1 className='font-bold text-3xl text-center first-letter:uppercase'>{title ? title : 'add a title'}</h1>
         </div>
 
-        <div className='w-[60%] mx-auto cursor-default'>
+        <div className='w-[60%] mx-auto cursor-default flex flex-col justify-start items-start gap-2'>
           {blockText.map(({type, content, urlObject, filename}, index) => (
             type === "block" ? (
               <p
@@ -316,14 +337,29 @@ export default function Lecture() {
             ) : type === "h1" ? (
               <h1
                 key={index}
-                className='cursor-pointer hover:outline-2 rounded-lg p-2 font-bold text-xl'
+                className='cursor-pointer hover:outline-2 rounded-lg p-2 font-bold text-2xl'
                 onClick={() => {
-                  setHeaderActive(true)
+                  setHeaderActive({type: 'h1', active: true})
                   return handleEditParagraph(content as string, index)
                 }}
               >
                 {content as string}
               </h1>
+            ) : type === "h2" ? (
+              <h2
+                key={index}
+                className='cursor-pointer hover:outline-2 rounded-lg p-2 font-bold text-xl'
+                onClick={() => {
+                  setHeaderActive({type: 'h2', active: true})
+                  return handleEditParagraph(content as string, index)
+                }}
+              >
+                {content as string}
+              </h2>
+            ) : type === "blockquote" ? (
+              <div key={index} className='p-4 bg-gray-200 border-s-2 border-primary w-full'>
+                <p className='font-semibold text-primary'>{content as string}</p>
+              </div>
             ) : (
               <div className='h-[200px] w-full rounded-lg relative bg-gray-200'>
                 <div className='h-full w-full flex flex-col justify-center items-center'>

@@ -1,5 +1,6 @@
 import { Question } from "@/types"
 import { client } from "@/utils/sanity"
+import { v4 as uuidv4 } from "uuid"
 
 export async function fetchAllQuestions() {
     const query = `*[_type == "question"]`
@@ -18,7 +19,6 @@ export async function fetchQuestionById(id: string) {
 }
 
 export async function fetchQuestions(id: string | undefined) {
-    console.log('id', id)
     const query = `*[_type == "question" && instructorId == "${id}"] | order(_createdAt)`
 
     const result = await client.fetch(query)
@@ -57,6 +57,13 @@ export async function fetchQuizQuestionBySubject(subject: string, studentId: str
     return result
 }
 
+export async function fetchQuestionsByEducationType(educationType: string) {
+    const query = `*[_type == "question" && educationType == "${educationType}"]`
+
+    const result = await client.fetch(query)
+
+    return result
+}
 
 export async function submitAnswer(answer: string, studentId: string, profileId: string, question: Question) {
     await client.create({
@@ -71,14 +78,14 @@ export async function submitAnswer(answer: string, studentId: string, profileId:
     })
 
     await client
-    .patch(question._id as string)
-    .setIfMissing({submissions: []})
-    .insert(
-        "after",
-        "submissions[-1]",
-        [studentId.toString()]
-    )
-    .commit()
+        .patch(question._id as string)
+        .setIfMissing({submissions: []})
+        .insert(
+            "after",
+            "submissions[-1]",
+            [studentId.toString()]
+        )
+        .commit()
 }
 
 export async function gradeAnswer(answerId: string, comment: string, grade: number) {
@@ -125,6 +132,14 @@ export async function fetchResources(author: string) {
 
 export async function fetchAllResources(id?: string | null) {
     const query = id ? `*[_type == "resource" && _id == "${id}"]` : `*[_type == "resource"]`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
+export async function fetchResourcesByEducationType(educationType: string) {
+    const query = `*[_type == "resource" && educationType == "${educationType}"]`
 
     const result = await client.fetch(query)
 
@@ -200,4 +215,16 @@ export async function fetchLectureById(id: string) {
     const result = await client.fetch(query)
 
     return result
+}
+
+export async function submitParticipation(name: string, content: string, lectureId: string) {
+    await client
+        .patch(lectureId)
+        .setIfMissing({participations: []})
+        .insert(
+            "after",
+            "participations[-1]",
+            [{name, content, _key: uuidv4()}]
+        )
+        .commit()
 }

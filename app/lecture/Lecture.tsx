@@ -1,19 +1,49 @@
 "use client"
 
+import { Button } from '@/components'
+import { submitParticipation } from '@/services/sanity'
 import { useUser } from '@/store'
-import { Lecture} from '@/types'
+import { Lecture, Participation} from '@/types'
 import dayjs from 'dayjs'
-import { div } from 'framer-motion/client'
 import Image from 'next/image'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { BiPaperPlane } from 'react-icons/bi'
 import { CgAttachment } from 'react-icons/cg'
 import { FiFileText } from 'react-icons/fi'
+import { toast } from 'sonner'
 
 export default function LectureDetails({lecture}: {lecture: Lecture}) {
     
-    const {role} = useUser()
+    const {role, userId, name} = useUser()
 
-    console.log('lecture', lecture)
+    const [participation, setParticipation] = useState("")
+    const [sending, setSending] = useState(false)
+    const [participations, setParticipations] = useState<Participation[]>([])
+
+    const sendParticipation = async () => {
+        try {
+            setSending(true)
+            await submitParticipation(name as string, participation, lecture._id as string)
+
+            const newParticipations = [...participations, {name, content: participation, _key: ''}]
+
+            setParticipations(newParticipations as Participation[])
+            setParticipation("")
+            toast.success("successfully contributed to the lesson")
+        } catch (error) {
+            console.log('error', error)
+        } finally {
+            setSending(false)
+        }
+    }
+
+    useEffect(() => {
+        const fetchParticipations = () => {
+            setParticipations(lecture?.participations! || [])
+        }
+
+        fetchParticipations()
+    }, [])
 
     return (
     <div>
@@ -40,16 +70,32 @@ export default function LectureDetails({lecture}: {lecture: Lecture}) {
         <div className='flex flex-col gap-4'>
             {lecture.content.map((block, i) => {
                 
-                return <>
+                return <div key={i}>
                         {block._type === "block" && block.style === 'normal' && (
                             block.children?.map((text, index) => (
-                                <p key={index} className='text-xl whitespace-pre-wrap'>{text.text}</p>
+                                <p key={index} className='text-lg md:text-xl whitespace-pre-wrap'>{text.text}</p>
                             ))
                         )}
                         {
                             block._type === 'block' && block.style === 'h1' && (
                                 block.children?.map((text, index) => (
                                     <h1 key={index} className='text-2xl font-bold'>{text.text}</h1>
+                                ))
+                            )
+                        }
+                        {
+                            block._type === 'block' && block.style === 'h2' && (
+                                block.children?.map((text, index) => (
+                                    <h2 key={index} className='text-xl font-semibold'>{text.text}</h2>
+                                ))
+                            )
+                        }
+                        {
+                            block._type === 'block' && block.style === 'blockquote' && (
+                                block.children?.map((text, index) => (
+                                    <div key={index} className='bg-gray-200 p-2 border-s-2 border-primary'>
+                                        <p className='text-primary cursor-pointer hover:text-primary/80'>{text.text}</p>
+                                    </div>
                                 ))
                             )
                         }
@@ -74,9 +120,41 @@ export default function LectureDetails({lecture}: {lecture: Lecture}) {
                                 </div>
                             </div>
                         )}
-                </>
+                </div>
                     })
                 }
+        </div>
+
+        <div className='flex flex-col gap-4 mt-10'>
+            <h1 className='text-2xl font-bold'>Participations</h1>
+
+            <div className='flex flex-col gap-6'>
+                {participations.length === 0 ? (
+                    <p className='text-gray-400 text-sm'>No student posted a comment or question yet.</p>
+                ) : (
+                    participations.map((participation, index) => (
+                        <div key={index}>
+                            <h1 className='font-bold text-xl text-primary capitalize'>{participation.name}</h1>
+                            <p>{participation.content}</p>
+                        </div>
+                    ))
+                )}
+            </div>
+
+            <div className='flex flex-col justify-center items-start gap-2 pb-20'>
+                <textarea
+                    className='border w-full rounded-lg p-4'
+                    placeholder={"add a comment or a question here..."}
+                    rows={3}
+                    value={participation}
+                    onChange={({target}) => setParticipation(target.value)}
+                ></textarea>
+
+                <Button handleOnClick={sendParticipation} primary disabled={participation === "" || sending} loading={sending} classes={"flex flex-row gap-2 rounded-lg mt-2"}>
+                    <span>Send</span>
+                    <BiPaperPlane size={35} />
+                </Button>
+            </div>
         </div>
     </div>
   )
