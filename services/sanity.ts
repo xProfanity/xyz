@@ -139,14 +139,23 @@ export async function fetchAllResources(id?: string | null) {
 }
 
 export async function fetchResourcesByEducationType(educationType: string) {
-    const query = `*[_type == "resource" && educationType == "${educationType}"]`
+    const query = `*[_type == "resource" && educationType == "${educationType}"] {
+        ...,
+        "document": {
+            ...,
+            "cover": {
+                "url": document.cover.asset -> url,
+                "name": document.cover.asset -> originalFilename
+            }
+        }
+    }`
 
     const result = await client.fetch(query)
 
     return result
 }
 
-export async function submitResource(title: string, notes: string, description: string, file: string, userId: string) {
+export async function submitResource(title: string, notes: string, description: string, file: string, userId: string, educationType: string, subject: string, course: string, form: string, level: string, thumb?: string) {
     const doc = {
         _type: 'resource',
         title,
@@ -157,8 +166,15 @@ export async function submitResource(title: string, notes: string, description: 
                 _type: 'reference',
                 _ref: file
             },
-            author: userId
-        }
+            author: userId,
+            cover: thumb ? {
+                asset: {
+                    _type: 'reference',
+                    _ref: thumb
+                }
+            } : null
+        },
+        subject, course, form, level, educationType
     }
 
     await client.create(doc)

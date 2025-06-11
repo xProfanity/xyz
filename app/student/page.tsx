@@ -12,6 +12,7 @@ import { Lecture, Question, Resource } from "@/types";
 import Skeleton from "react-loading-skeleton";
 import Link from "next/link";
 import dayjs from "dayjs";
+import Image from "next/image";
 
 export default function Home() {
   
@@ -101,6 +102,8 @@ const TabsBooks = () => {
   const [resources, setResources] = useState<Resource[] | null>(null)
   const {active} = useTabs()
 
+  console.log('resources', resources)
+
   const [fetching, setFetching] = useState(false)
 
   const {studentType: educationType} = useUser()
@@ -126,19 +129,32 @@ const TabsBooks = () => {
   return (
     <div className="flex flex-row flex-wrap gap-4 w-full mt-4">
         {resources?.map((resource, index) => (
-          <div key={index} className="w-[300px] rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col justify-between p-4">
-            <h1>{resource.title}</h1>
+          resource.document.cover.url ? (
+            <Link href={`${resource.document.cover.url}/?dl=lecture-${resource.document.cover.name}`} className="relative rounded-lg cursor-pointer">
+              <div className="relative h-[200px] w-[350px]">
+                <Image
+                  src={resource.document.cover.url!}
+                  alt={resource.document.cover.name!}
+                  fill
+                  className="object-fill rounded-lg"
+                />
+              </div>
+            </Link>
+          ) : (
+            <Link href={`${resource.document.cover.url}/?dl=lecture-${resource.document.cover.name}`} key={index} className="w-[300px] rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col justify-between p-4">
+              <h1>{resource.title}</h1>
 
-            {/* <div>
-              <div className="mt-2">
-                <p className="font-bold text-lg">{resource..subject || question.course}</p>
-              </div>
-              <div className="mt-2 flex flex-row justify-between items-center">
-                <p className="text-gray-400">{dayjs(question._createdAt).format("DD MMMM, YYYY")}</p>
-                <p>{question.submissions?.length || 0} answer{question.submissions?.length !== 1 && 's'}</p>
-              </div>
-            </div> */}
-          </div>
+              {/* <div>
+                <div className="mt-2">
+                  <p className="font-bold text-lg">{resource..subject || question.course}</p>
+                </div>
+                <div className="mt-2 flex flex-row justify-between items-center">
+                  <p className="text-gray-400">{dayjs(question._createdAt).format("DD MMMM, YYYY")}</p>
+                  <p>{question.submissions?.length || 0} answer{question.submissions?.length !== 1 && 's'}</p>
+                </div>
+              </div> */}
+            </Link>
+          )
         ))}
         {fetching && (
           [...Array(4)].map((_, index) => (
