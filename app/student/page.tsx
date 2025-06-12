@@ -129,19 +129,19 @@ const TabsBooks = () => {
   return (
     <div className="flex flex-row flex-wrap gap-4 w-full mt-4">
         {resources?.map((resource, index) => (
-          resource.document.cover.url ? (
-            <Link href={`${resource.document.cover.url}/?dl=lecture-${resource.document.cover.name}`} className="relative rounded-lg cursor-pointer">
+          resource.document.cover.coverUrl ? (
+            <Link href={`${resource.document.cover.fileUrl}/?dl=lecture-${resource.document.cover.fileName}`} className="relative rounded-lg cursor-pointer">
               <div className="relative h-[200px] w-[350px]">
                 <Image
-                  src={resource.document.cover.url!}
-                  alt={resource.document.cover.name!}
+                  src={resource.document.cover.coverUrl!}
+                  alt={resource.document.cover.coverName!}
                   fill
                   className="object-fill rounded-lg"
                 />
               </div>
             </Link>
           ) : (
-            <Link href={`${resource.document.cover.url}/?dl=lecture-${resource.document.cover.name}`} key={index} className="w-[300px] rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col justify-between p-4">
+            <Link href={`${resource.document.cover.fileUrl}/?dl=lecture-${resource.document.cover.fileName}`} key={index} className="w-[300px] rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col justify-between p-4">
               <h1>{resource.title}</h1>
 
               {/* <div>

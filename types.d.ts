@@ -54,8 +54,10 @@ export type Resource = Partial<SanityObject> & {
     author: string
     notes: string
     cover: {
-      url: string | null
-      name: string | null
+      coverUrl: string | null
+      coverName: string | null
+      fileName: string
+      fileUrl: string
     }
   }
 }

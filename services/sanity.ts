@@ -144,8 +144,10 @@ export async function fetchResourcesByEducationType(educationType: string) {
         "document": {
             ...,
             "cover": {
-                "url": document.cover.asset -> url,
-                "name": document.cover.asset -> originalFilename
+                "coverUrl": document.cover.asset -> url,
+                "coverName": document.cover.asset -> originalFilename,
+                "fileUrl": document.asset -> url,
+                "fileName": document.asset -> originalFilename
             }
         }
     }`
