@@ -38,7 +38,7 @@ export default function Books() {
     }, [])
   
     return (
-      <div className="flex flex-row flex-wrap gap-4 w-full mt-4">
+      <div className="flex flex-row flex-wrap justify-center items-center md:justify-normal md:items-start gap-4 w-full mt-4">
           {resources?.map((resource, index) => (
             resource.document.cover.coverUrl ? (
               <Link href={`${resource.document.cover.fileUrl}/?dl=lecture-${resource.document.cover.fileName}`} className="relative rounded-lg cursor-pointer">

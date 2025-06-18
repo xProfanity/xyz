@@ -39,7 +39,7 @@ export default function Questions() {
   }, [])
 
   return (
-    <div className="flex flex-row flex-wrap gap-4 w-full mt-4">
+    <div className="flex flex-row flex-wrap justify-center items-center md:justify-normal md:items-start gap-4 w-full mt-4">
         {questions?.map((question, index) => (
           <Link href={`/question/${question._id}`} key={index} className="w-[300px] flex-1/2 md:flex-1/4 lg:flex-1/5 xl:flex-1/6 rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col justify-between p-4">
             <h1>{question.question}</h1>
