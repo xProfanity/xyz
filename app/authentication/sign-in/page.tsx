@@ -82,11 +82,17 @@ export default function Signin() {
                 })
             })
 
+            const enrollments = await fetchRequest("enrollments/", "GET")
+
+            const studentEnrollments = enrollments.filter((enrollment: {student: number}, index: number) => enrollment.student === data.user_id)[0]
+
             setData({
                 name: data.username,
                 email: emailAddress,
                 role: data.role,
                 userId: data.user_id,
+                course: studentEnrollments.course,
+                form: studentEnrollments.current_level
             })
             setError("")
             router.push(data?.role?.toLowerCase() === 'student' ? '/student' : data?.role?.toLowerCase() === "admin" ? '/admin' : '/instructor')

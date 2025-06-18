@@ -6,11 +6,13 @@ import { usePathname } from "next/navigation"
 export default function Header() {
     const pathname = usePathname()
 
+    console.log('pathname', pathname)
+
     const {active} = useTabs()
 
   return (
     <h1 className="poppins-bold md:text-xl lg:text-3xl xl:text-5xl capitalize">
-      {active === "all" ? "Dashboard" : active}
+      {pathname.replace("/student", "").replace("/", "") || "dashboard"}
     </h1>
   )
 }

@@ -1,29 +1,48 @@
 import { HiBookOpen } from "react-icons/hi";
 import { Quizzes } from "./quizzes";
 
+import {motion} from "framer-motion"
+import Link from "next/link";
+
 export const WorkField = ({studentType, userId, profileId}: {studentType: "secondary" | "professional" | undefined; userId: string | undefined; profileId: string | null | undefined}) => {
     return (
-      <div className="grid gap-4">
-        <div className="bg-[#F7D5EA] pb-10 rounded-3xl w-full p-4 flex flex-col justify-start items-start gap-4">
-          <div className="flex w-full flex-row justify-between items-center poppins-semibold">
-            <h1>Progress</h1>
-            <h1><span>0</span>%</h1>
-          </div>
-  
-          <div className="bg-[#F0C6DB] w-full relative h-2 rounded-3xl overflow-hidden">
-            <div className="bg-[#312829] h-2 w-[0%]"></div>
-          </div>
-  
-          <div className="mt-10 bg-[#F4C5DF] h-64 lg:h-72 w-64 lg:w-72 rounded-full mx-auto hidden sm:flex flex-col justify-center items-center">
-            <HiBookOpen color="#D991B7" className="-mt-20 h-[200px] w-[200px] lg:h-[300px] lg:w-[300px]" />
-  
-            <p className="text-gray-600 -mt-10">Consistency is the key</p>
-          </div>
+      <div className="flex flex-col justify-around items-center gap-4 h-full">
+        <div className="h-12 w-full flex flex-col justify-center items-start">
+          <h1 className="text-xl font-bold ">Select an activity below.</h1>
         </div>
-  
-        <div>
-          <Quizzes educationType={studentType} userId={userId} profileId={profileId as string | undefined} />
-        </div>
+
+        <Link href={"/student/lectures"} className="w-full">
+          <motion.div
+            whileHover={{
+              scale: 1.01
+            }}
+            className="bg-[#F7D5EA] h-44 cursor-pointer rounded-lg w-full flex flex-col justify-start items-start gap-4 p-4 bg-[url('/flower.svg')] relative bg-cover bg-left-bottom bg-no-repeat">
+              <span className="poppins-bold text-2xl sm:text-4xl">{studentType === "professional" ? "Lectures" : "Classes"}</span>
+              <h1 className="text-gray-600 text-xs sm:text-base">participate in activities with your {studentType === "professional" ? 'lecturers' : 'teachers'}</h1>  
+          </motion.div>
+        </Link>
+
+        <Link href={"student/books"} className="w-full">
+          <motion.div
+            whileHover={{
+              scale: 1.01
+            }}
+            className="bg-[#F7D5EA] h-44 cursor-pointer rounded-lg w-full flex flex-col justify-start items-start gap-4 p-4 bg-[url('/flower.svg')] relative bg-cover bg-left-bottom bg-no-repeat">
+              <span className="poppins-bold text-2xl sm:text-4xl">Books/Resources</span>
+              <h1 className="text-gray-600 text-xs sm:text-base">Acquire books/resources shared by your {studentType === "professional" ? "lecturers" : "teachers"}</h1>  
+          </motion.div>
+        </Link>
+
+        <Link href={"student/questions"} className="w-full">
+          <motion.div
+            whileHover={{
+              scale: 1.01
+            }}
+            className="bg-[#F7D5EA] h-44 cursor-pointer rounded-lg w-full flex flex-col justify-start items-start gap-4 p-4 bg-[url('/flower.svg')] relative bg-cover bg-left-bottom bg-no-repeat">
+              <span className="poppins-bold text-2xl sm:text-4xl">Questions</span>
+              <h1 className="text-gray-600 text-xs sm:text-base">Test yourself with some of the questions from your class activities</h1>  
+          </motion.div>
+        </Link>
       </div>
     )
   }

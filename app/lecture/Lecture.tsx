@@ -23,7 +23,7 @@ export default function LectureDetails({lecture}: {lecture: Lecture}) {
     const sendParticipation = async () => {
         try {
             setSending(true)
-            await submitParticipation(name as string, participation, lecture._id as string)
+            await submitParticipation(name as string, participation, lecture._id as string, lecture._id === userId)
 
             const newParticipations = [...participations, {name, content: participation, _key: ''}]
 
@@ -133,9 +133,12 @@ export default function LectureDetails({lecture}: {lecture: Lecture}) {
                     <p className='text-gray-400 text-sm'>No student posted a comment or question yet.</p>
                 ) : (
                     participations.map((participation, index) => (
-                        <div key={index}>
-                            <h1 className='font-bold text-xl text-primary capitalize'>{participation.name}</h1>
-                            <p>{participation.content}</p>
+                        <div key={index} className='flex flex-col justify-start items-start'>
+                            <div className='flex flex-row justify-start items-center gap-4'>
+                                <h1 className={`font-bold text-xl ${participation.lecture ? 'text-orange-500' : 'text-primary'} capitalize`}>{participation.name}</h1>
+                                <span className='text-gray-400 text-xs'>{dayjs(participation.createdAt).format("DD MMMM, YYYY")}</span>
+                            </div>
+                            <p className='whitespace-pre-line mt-2'>{participation.content}</p>
                         </div>
                     ))
                 )}

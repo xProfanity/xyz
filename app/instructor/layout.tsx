@@ -17,7 +17,7 @@ import { VscReply } from 'react-icons/vsc'
 import { IoCreate, IoCreateOutline, IoDocumentAttachSharp } from 'react-icons/io5'
 import { BsTools } from 'react-icons/bs'
 import { GoTools } from 'react-icons/go'
-import { GiExplosiveMaterials, GiTeacher } from 'react-icons/gi'
+import { GiDiscussion, GiExplosiveMaterials, GiTeacher } from 'react-icons/gi'
 import { GrDocumentNotes, GrResources } from 'react-icons/gr'
 import { FaChalkboardTeacher, FaRegAddressBook } from 'react-icons/fa'
 
@@ -43,6 +43,11 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
       name: 'resources',
       link: '/instructor/resources',
       icon: <IoDocumentAttachSharp size={25} />,
+    },
+    {
+      name: 'lectures',
+      link: '/instructor/lectures',
+      icon: <GiDiscussion size={25} />,
     },
     {
       name: 'add resources',

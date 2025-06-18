@@ -319,7 +319,7 @@ export default function Lecture() {
             type === "block" ? (
               <p
                 key={index}
-                className='cursor-pointer hover:outline-2 rounded-lg p-2'
+                className='cursor-pointer hover:outline-2 rounded-lg p-2 whitespace-pre-wrap'
                 onClick={() => handleEditParagraph(content as string, index)}
               >
                 {content as string}

@@ -12,6 +12,7 @@ import "../globals.css";
 import { CiSettings } from "react-icons/ci";
 import { GrSchedule } from "react-icons/gr";
 import { LuNotebookPen } from "react-icons/lu";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -51,14 +52,16 @@ export default function RootLayout({
           <Sidebar />
           <div className="relative px-2 sm:px-0 h-auto w-full flex flex-col justify-center items-center bg-[#F0EFF4] shadow">
             <div className="w-full mx-auto h-16 flex flex-row justify-between items-center">
-              <Image
-                src={"/logo.png"}
-                height={100}
-                width={80}
-                alt="Excellence Logo"
-                className="object-cover block"
-                blurDataURL=""
-              />
+              <Link href="/student">
+                <Image
+                  src={"/logo.png"}
+                  height={100}
+                  width={80}
+                  alt="Excellence Logo"
+                  className="object-cover block"
+                  blurDataURL=""
+                />
+              </Link>
               
               <div className="flex md:hidden">
                 <HamburgerMenu />

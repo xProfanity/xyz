@@ -10,6 +10,8 @@ interface User {
     role: string
     studentType: "professional" | "secondary"
     profileId: string | null
+    form: string | null
+    course: string | null
 }
 
 type UserState = Partial<User> & {

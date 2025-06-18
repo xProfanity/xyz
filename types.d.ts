@@ -31,6 +31,8 @@ interface Participation {
   name: string
   content: string
   _key: string
+  createdAt: string
+  lecture: boolean
 }
 
 export type Lecture = Partial<SanityObject> & {

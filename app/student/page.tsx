@@ -16,17 +16,21 @@ import Image from "next/image";
 
 export default function Home() {
   
-  const {active} = useTabs()
-  
-
-
+  const {studentType, profileId, userId} = useUser((state) => state)
   return (
-    <>
-    {active === "all" &&<TabsAll />}
-    {active === "books" && <TabsBooks />}
-    {active === "lectures" && <TabsLectures />}
-    {active === "quizzes" && <TabsQuizzes />}
-    </>
+    <div className="flex flex-col-reverse md:grid md:grid-cols-5 gap-4 mt-4 h-auto">
+      <div className="col-span-2 hidden md:block">
+        <Statistics studentType={studentType} />
+      </div>
+      <div className="col-span-3 bg-[#F0EFF4] rounded-3xl flex flex-col lg:grid lg:grid-cols-2 p-6 gap-4 h-auto">
+        <div className="col-span-1 w-full">
+          <WorkField studentType={studentType} profileId={profileId} userId={userId} />
+        </div>
+        <div className="hidden md:block md:col-span-1">
+          <Schedules studentType={studentType} />
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -38,7 +42,7 @@ const TabsAll = () => {
         <Statistics studentType={studentType} />
       </div>
       <div className="col-span-3 bg-[#F0EFF4] rounded-3xl flex flex-col lg:grid lg:grid-cols-2 p-6 gap-4 h-full">
-        <div className="col-span-1">
+        <div className="col-span-1 w-full">
           <WorkField studentType={studentType} profileId={profileId} userId={userId} />
         </div>
         <div className="hidden md:block md:col-span-1">
@@ -78,6 +82,12 @@ const TabsLectures = () => {
 
   return (
     <div className="flex flex-row flex-wrap gap-4 w-full mt-4">
+        {!lectures?.length && (
+          <div className="w-full flex flex-col justify-center items-center">
+            <p className="text-lg text-gray-400">No {educationType === "professional" ? "lectures" : "classes"} available {educationType === "professional" && "for your program"} yet!</p>
+          </div>
+        )}
+        
         {lectures?.map((lecture, index) => (
           <Link href={`/lecture/${lecture._id}`} key={index} className="w-[300px] rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col p-4">
             <h1>{lecture.title}</h1>
@@ -101,8 +111,6 @@ const TabsLectures = () => {
 const TabsBooks = () => {
   const [resources, setResources] = useState<Resource[] | null>(null)
   const {active} = useTabs()
-
-  console.log('resources', resources)
 
   const [fetching, setFetching] = useState(false)
 

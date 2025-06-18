@@ -57,8 +57,8 @@ export async function fetchQuizQuestionBySubject(subject: string, studentId: str
     return result
 }
 
-export async function fetchQuestionsByEducationType(educationType: string) {
-    const query = `*[_type == "question" && educationType == "${educationType}"]`
+export async function fetchQuestionsByEducationType(educationType: string, form: string, course: string) {
+    const query = `*[_type == "question" && educationType == "${educationType}" && (form == "${form?.toLowerCase()}" || course == "${course?.toLowerCase()}")]`
 
     const result = await client.fetch(query)
 
@@ -138,8 +138,8 @@ export async function fetchAllResources(id?: string | null) {
     return result
 }
 
-export async function fetchResourcesByEducationType(educationType: string) {
-    const query = `*[_type == "resource" && educationType == "${educationType}"] {
+export async function fetchResourcesByEducationType(educationType: string, form: string | null | undefined, course: string | null | undefined) {
+    const query = `*[_type == "resource" && educationType == "${educationType}" && (form == "${form?.toLowerCase()}" || course == "${course?.toLowerCase()}")] {
         ...,
         "document": {
             ...,
@@ -206,8 +206,16 @@ export async function fetchLectures() {
     return result
 }
 
-export async function fetchLecturesByEducationType(educationType: string) {
-    const query = `*[_type == "lecture" && educationType == "${educationType}"]`
+export async function fetchLecturesByLecture(lectureId: string) {
+    const query = `*[_type == "lecture" && instructorId == "${lectureId}"]`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
+export async function fetchLecturesByEducationType(educationType: string, form: string | null | undefined, course: string | null | undefined) {
+    const query = `*[_type == "lecture" && educationType == "${educationType}" && (form == "${form?.toLowerCase()}" || course == "${course?.toLowerCase()}")]`
 
     const result = await client.fetch(query)
 
@@ -235,14 +243,14 @@ export async function fetchLectureById(id: string) {
     return result
 }
 
-export async function submitParticipation(name: string, content: string, lectureId: string) {
+export async function submitParticipation(name: string, content: string, lectureId: string, lecture: boolean) {
     await client
         .patch(lectureId)
         .setIfMissing({participations: []})
         .insert(
             "after",
             "participations[-1]",
-            [{name, content, _key: uuidv4()}]
+            [{name, content, lecture, _key: uuidv4()}]
         )
         .commit()
 }

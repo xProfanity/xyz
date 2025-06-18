@@ -4,20 +4,17 @@ import { SubjectProgress } from "./student-progress"
 
 export const Schedules = ({studentType}: {studentType: "secondary" | "professional" | undefined}) => {
     return (
-      <div className="">
-        <WeekDates />
-        <SubjectProgress educationType={studentType} />
-        <div className="mt-8">
+      <div className="flex flex-col justify-start  gap-4 h-full">
+        <div className="h-12 w-full flex flex-col justify-center items-start">
           <h1 className="poppins-bold text-2xl">My schedules</h1>
-          <div className="mt-4">
-            <p className="text-gray-400 text-lg">your planned schedules and ongoing activities will appear will appear here.</p>
-          </div>
-  
-          <div className="mt-4">
-            <Button handleOnClick={() => {}} primary classes={"rounded-lg"}>
-              Start planning
-            </Button>
-          </div>
+        </div>
+
+        <WeekDates />
+
+        <div className="mt-8">
+          <Button handleOnClick={() => {}} primary classes={"rounded-lg"}>
+            Start planning
+          </Button>
         </div>
       </div>
     )

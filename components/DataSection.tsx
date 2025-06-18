@@ -7,6 +7,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { BiDownload } from 'react-icons/bi'
+import { VscCommentDiscussion } from 'react-icons/vsc'
+
+interface Participation {
+    content: string
+    name: string
+}
 
 type SanityData = Partial<Answer> & {
     title: string
@@ -18,6 +24,7 @@ type SanityData = Partial<Answer> & {
         description: string
         author: string
     }
+    participations?: Participation[]
 }
 
 interface Props {
@@ -65,6 +72,22 @@ export default function DataSection({data}: Props) {
                                 </Link>
                             </div>
                         </div>
+                    )}
+
+                    {data._type === "lecture" && (
+                        <Link href={`/lecture/${data._id}`} className='min-h-[180px] min-w-[250px] flex flex-col justify-between cursor-pointer'>
+                            <div>
+                                <h1 className='poppins-semibold text-primary'>{data.title}</h1>
+                            </div>
+
+                            <div className='flex flex-row justify-between items-center'>
+                                <h1 className='text-gray-400'>{dayjs(new Date(data._createdAt!)).format("DD MMMM, YYYY")}</h1>
+                                <div className='flex flex-row gap-2 justify-center items-center'>
+                                    <span>{data.participations?.length || 0}</span>
+                                    <VscCommentDiscussion size={25} />
+                                </div>
+                            </div>
+                        </Link>
                     )}
                 </div>
             ))}
