@@ -19,7 +19,7 @@ export default function Sidebar() {
         x: isOpen ? '-100%' : '0'
       }}
       transition={{
-        stiffness: '1'
+        stiffness: 1
       }}
     >
       <div className='w-full flex flex-col'>
