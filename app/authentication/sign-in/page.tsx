@@ -99,7 +99,7 @@ export default function Signin() {
         } catch (rejection) {
             console.log('error signing in', rejection)
             setPassword("")
-            setError("error signing in")
+            setError(typeof rejection === "string" ? rejection : "error signing in")
         } finally {
             setIsLoading(false)
         }
