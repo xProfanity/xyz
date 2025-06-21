@@ -44,7 +44,7 @@ export default function Signin() {
                 setPassword("")
                 // setError("Credentials don't match any records")
                 
-                throw "Credentials don't match any records"
+                return setError("Credentials don't match any records")
             }
 
             localStorage.setItem('access', data.access)
