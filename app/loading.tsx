@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Loading() {
   return (
-    <div className='h-screen flex flex-col justify-center items-center w-full max-w-xl'>
+    <div className='h-screen flex flex-col justify-center items-center w-full max-w-xl mx-auto'>
       <div>
         <Image
           src={"/logo.png"}

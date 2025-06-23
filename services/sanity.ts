@@ -243,6 +243,14 @@ export async function fetchLectureById(id: string) {
     return result
 }
 
+export async function fetchLecturesBySubject(subject: string) {
+    const query = `*[_type == "lecture" && (subject == "${subject}" || course == "${subject}")]`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
 export async function submitParticipation(name: string, content: string, lectureId: string, lecture: boolean) {
     await client
         .patch(lectureId)

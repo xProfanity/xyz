@@ -33,3 +33,7 @@ export const BASEURL = "https://api.dev.excellencemalawi.com/api"
 export const isUserLoggedIn = () => {
   return !!localStorage.getItem('access')
 }
+
+export const subjects = ["English","Mathematics","Geography","Chemistry","Physics","Biology"]
+
+export const courses = ["ACCA","ABMA","ICAM","CILT","ABE",]

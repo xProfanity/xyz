@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <h1 className="poppins-bold md:text-xl lg:text-3xl xl:text-5xl capitalize">
-      {pathname.replace("/student", "").replace("/", "") || "dashboard"}
+      {pathname.replace("/student", "").replace("/", "").replace("/", " - ") || "dashboard"}
     </h1>
   )
 }

@@ -1,4 +1,5 @@
 "use client"
+import useSchool from '@/hooks/useSchool'
 import { fetchLecturesByEducationType } from '@/services/sanity'
 import { useTabs, useUser } from '@/store'
 import { Lecture } from '@/types'
@@ -15,6 +16,8 @@ export default function Lectures() {
     const [fetching, setFetching] = useState(false)
 
     const {studentType: educationType, course, form} = useUser()
+    const {getSubjects} = useSchool()
+
     useEffect(() => {
         const handleFetchLectures = async () => {
         try {
@@ -34,7 +37,14 @@ export default function Lectures() {
   return (
     <div className="flex flex-row flex-wrap justify-center items-center md:justify-normal md:items-start gap-4 w-full mt-4">
         
-        {lectures?.map((lecture, index) => (
+        
+        {getSubjects(educationType)?.map((subject, index) => (
+          <Link href={`/student/lectures/${subject.subject.toLowerCase()}`} key={index} className='w-[300px] rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col p-4'>
+            <h1>{subject.subject}</h1>
+          </Link>
+        ))}
+        
+        {/* {lectures?.map((lecture, index) => (
           <Link href={`/lecture/${lecture._id}`} key={index} className="w-[300px] rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col p-4">
             <h1>{lecture.title}</h1>
 
@@ -49,7 +59,7 @@ export default function Lectures() {
           [...Array(4)].map((_, index) => (
             <Skeleton height={500} width={300} className="rounded-lg" />
           ))
-        )}
+        )} */}
     </div>
   )
 }
