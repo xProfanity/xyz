@@ -1,4 +1,4 @@
-import { fetchLecturesBySubject, fetchSubjects } from "@/services/sanity"
+import { fetchLecturesBySubject, fetchResourcesBySubject, fetchSubjects } from "@/services/sanity"
 import FetchedData from "../../FetchedData"
 
 interface Subject {
@@ -13,9 +13,9 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function Subjects({params}: {params: Promise<{subject: string}>}) {
+export default async function Books({params}: {params: Promise<{subject: string}>}) {
     const {subject} = await params
-    const lectures = await fetchLecturesBySubject(subject)
+    const lectures = await fetchResourcesBySubject(subject)
   return (
     <FetchedData data={lectures} subject={subject} />
   )

@@ -222,6 +222,17 @@ export async function fetchLecturesByEducationType(educationType: string, form: 
     return result
 }
 
+export async function fetchSubjectsByEducationType(educationType: string) {
+    const query = `*[_type == "subject" && educationType == "${educationType}"] {
+        ...,
+        "picture": picture.asset -> url
+    }`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
 export async function fetchLectureById(id: string) {
     const query = `*[_type == "lecture" && _id == "${id}"][0]{
         ...,
@@ -243,8 +254,24 @@ export async function fetchLectureById(id: string) {
     return result
 }
 
+export async function fetchSubjects() {
+    const query = `*[_type == "subject"]`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
 export async function fetchLecturesBySubject(subject: string) {
     const query = `*[_type == "lecture" && (subject == "${subject}" || course == "${subject}")]`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
+export async function fetchResourcesBySubject(subject: string) {
+    const query = `*[_type == "resource" && (subject == "${subject}" || course == "${subject}")]`
 
     const result = await client.fetch(query)
 
