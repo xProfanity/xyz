@@ -1,63 +1,74 @@
 "use client"
 
-import { fetchQuestionsByEducationType } from '@/services/sanity'
+import { fetchSubjectsByEducationType } from '@/services/sanity'
 import { useTabs, useUser } from '@/store'
-import { Question } from '@/types'
-import dayjs from 'dayjs'
+import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { toast } from 'sonner'
 
+interface Subject {
+  subjectName: string
+  picture: string
+}
+
 export default function Questions() {
-  const [questions, setQuestions] = useState<Question[] | null>(null)
+    const [subjects, setSubjects] = useState<Subject[] | null>(null)
+    const {active} = useTabs()
 
-  const [fetching, setFetching] = useState(false)
+    const [fetching, setFetching] = useState(false)
 
-  const {studentType: educationType, form, course} = useUser()
+    const {studentType: educationType} = useUser()
 
-  console.log('questions', questions)
 
-  console.log('educationType', educationType)
+    useEffect(() => {
+        const handleFetchSubjects = async () => {
+        try {
+            setFetching(true)
+            const response = await fetchSubjectsByEducationType(educationType as string)
+            setSubjects(response)
+        } catch (error) {
+            console.log('error', error)
+            toast.error("error fetching subjects")
+        } finally {
+            setFetching(false)
+        }
+        }
 
-  useEffect(() => {
-    const handleFetchLectures = async () => {
-      try {
-
-        setFetching(true)
-        const response = await fetchQuestionsByEducationType(educationType as string, form as string, course as string)
-        setQuestions(response)
-      } catch (error) {
-        console.log('error', error)
-        toast.error("error fetching lectures")
-      } finally {
-        setFetching(false)
-      }
-    }
-
-    handleFetchLectures()
-  }, [])
-
+        handleFetchSubjects()
+    }, [])
   return (
     <div className="flex flex-row flex-wrap justify-center items-center md:justify-normal md:items-start gap-4 w-full mt-4">
-        {questions?.map((question, index) => (
-          <Link href={`/question/${question._id}`} key={index} className="w-[300px] flex-1/2 md:flex-1/4 lg:flex-1/5 xl:flex-1/6 rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col justify-between p-4">
-            <h1>{question.question}</h1>
-
-            <div>
-              <div className="mt-2">
-                <p className="font-bold text-lg">{question.subject || question.course}</p>
-              </div>
-              <div className="mt-2 flex flex-row justify-between items-center">
-                <p className="text-gray-400">{dayjs(question._createdAt).format("DD MMMM, YYYY")}</p>
-                <p>{question.submissions?.length || 0} answer{question.submissions?.length !== 1 && 's'}</p>
-              </div>
-            </div>
+        
+        
+        {subjects?.map((subject, index) => (
+          <Link href={`/student/questions/${subject.subjectName?.toLowerCase()}`} key={index} className='w-[300px] rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col justify-center items-start p-4'>
+              <Image
+                src={subject.picture}
+                height={180}
+                width={400}
+                alt={`${subject.subjectName} logo`}
+                className='object-cover rounded-lg'
+              />
+            <h1 className='font-semibold text-lg mt-5'>{subject.subjectName}</h1>
           </Link>
         ))}
+        
+        {/* {lectures?.map((lecture, index) => (
+          <Link href={`/lecture/${lecture._id}`} key={index} className="w-[300px] rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col p-4">
+            <h1>{lecture.title}</h1>
+
+            <div className="mt-2">
+              <p className="font-bold text-lg">{lecture.subject || lecture.course}</p>
+            </div>
+
+            <p className="mt-2 text-gray-400">{dayjs(lecture._createdAt).format("DD MMMM, YYYY")}</p>
+          </Link>
+        ))} */}
         {fetching && (
           [...Array(4)].map((_, index) => (
-            <Skeleton height={500} width={300} className="rounded-lg" key={index} />
+            <Skeleton height={150} width={300} className="rounded-lg" />
           ))
         )}
     </div>

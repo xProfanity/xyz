@@ -271,7 +271,26 @@ export async function fetchLecturesBySubject(subject: string) {
 }
 
 export async function fetchResourcesBySubject(subject: string) {
-    const query = `*[_type == "resource" && (subject == "${subject}" || course == "${subject}")]`
+    const query = `*[_type == "resource" && (subject == "${subject}" || course == "${subject}")]{
+        ...,
+        "document": {
+            ...,
+            "cover": {
+                "coverUrl": document.cover.asset -> url,
+                "coverName": document.cover.asset -> originalFilename,
+                "fileUrl": document.asset -> url,
+                "fileName": document.asset -> originalFilename
+            }
+        }
+    }`
+
+    const result = await client.fetch(query)
+
+    return result
+}
+
+export async function fetchQuestionsBySubject(subject: string) {
+    const query = `*[_type == "question" && (subject == "${subject}" || course == "${subject}")]`
 
     const result = await client.fetch(query)
 
