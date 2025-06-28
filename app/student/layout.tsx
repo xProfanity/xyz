@@ -7,7 +7,7 @@ import { MdOutlineSubject } from "react-icons/md";
 import { RiHome4Fill, RiProgress7Line } from "react-icons/ri";
 import { TbCategory } from "react-icons/tb";
 
-import { Filters, HamburgerMenu, Header, NavLink, Sidebar, StudentName } from "@/components";
+import { Filters, HamburgerMenu, Header, NavButtons, NavLink, Sidebar, StudentName } from "@/components";
 import "../globals.css";
 import { CiSettings } from "react-icons/ci";
 import { GrSchedule } from "react-icons/gr";
@@ -85,7 +85,9 @@ export default function RootLayout({
               </div>
             </div>
           </div>
-          <div className="rounded-3xl w-full p-2 md:p-8 mt-0 md:mt-10">
+          <div className="rounded-3xl w-full p-2 md:p-8 mt-0 md:mt-6">
+            <NavButtons />
+
             <div className="hidden  md:flex flex-col md:flex-row justify-start md:justify-between md:items-center">
               <Header />
               <Filters />

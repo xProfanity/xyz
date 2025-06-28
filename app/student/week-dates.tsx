@@ -16,7 +16,7 @@ export const WeekDates = () => {
 
   useEffect(() => {
     const getDaysOfTheWeek = () => {
-      const daysOfTheWeek = [...new Array(5)].map((_, index) => {
+      const daysOfTheWeek = [...new Array(7)].map((_, index) => {
 
         const d = dayjs().add(((index) - dayjs().day())+1, 'days')
 
