@@ -1,5 +1,6 @@
 "use client"
 import Link from "next/link"
+import {Lecture} from "@/types"
 
 export default function NotificationLogs({availableLectures}: {availableLectures: Lecture[] | null}) {
   return (
