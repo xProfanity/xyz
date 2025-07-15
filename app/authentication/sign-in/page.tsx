@@ -100,8 +100,9 @@ export default function Signin() {
             console.log('error signing in', rejection)
             setPassword("")
             setError(typeof rejection === "string" ? rejection : "error signing in")
+			setIsLoading(false)
         } finally {
-            setIsLoading(false)
+           
         }
     }
     const handleSignUp = async () => {
@@ -156,8 +157,9 @@ export default function Signin() {
             setConfirmPassword("")
             setPassword("")
             setError("error signing in")
+      setIsLoading(false)
         } finally {
-            setIsLoading(false)
+      
         }
     }
 

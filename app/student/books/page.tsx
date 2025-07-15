@@ -38,9 +38,9 @@ export default function Books() {
         handleFetchSubjects()
     }, [])
   return (
-    <div className="flex flex-row flex-wrap justify-center items-center md:justify-normal md:items-start gap-4 w-full mt-4">
+    <div className="flex flex-row flex-wrap justify-between gap-4 w-full mt-4 px-8">
         {subjects?.map((subject, index) => (
-          <Link href={`/student/books/${subject.subjectName?.toLowerCase()}`} key={index} className='w-[300px] rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col justify-center items-start p-4'>
+          <Link href={`/student/books/${subject.subjectName?.toLowerCase()}`} key={index} className='w-[300px] rounded-lg bg-gray-300 hover:bg-gray-300/70 cursor-pointer flex flex-col justify-between items-start p-4'>
               <Image
                 src={subject.picture}
                 height={180}

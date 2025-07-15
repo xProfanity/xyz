@@ -8,8 +8,6 @@ export async function middleware(request: NextRequest) {
 
     const link = request.nextUrl.pathname
 
-    console.log('link', link)
-
     if(!access?.value) {
         return NextResponse.redirect(new URL('/authentication/sign-in', request.url))
     }
