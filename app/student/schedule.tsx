@@ -5,10 +5,11 @@ import { WeekDates } from "./week-dates"
 import { SubjectProgress } from "./student-progress"
 import NotificationLogs from "./NotificationLogs"
 import {useEffect, useState} from "react"
-import {useUser} from "@store/"
+import {useUser} from "@/store"
 import {fetchLecturesByEducationType} from "@services/sanity"
 import {toast} from "sonner"
 import Link from "next/link"
+import {Lecture} from "@/types"
 
 export const Schedules = ({studentType}: {studentType: "secondary" | "professional" | undefined}) => {
 	
@@ -19,7 +20,7 @@ export const Schedules = ({studentType}: {studentType: "secondary" | "profession
 	useEffect(() => {
 		const fetchAvailableLectures = async () => {
 			try {
-					const response = await fetchLecturesByEducationType(educationType, form, course) 				
+					const response = await fetchLecturesByEducationType(educationType as string, form, course) 				
 					setAvailableLectures(response)
 			} catch (error) {
 			console.log("error", error);
